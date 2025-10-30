@@ -40,7 +40,6 @@ class Coordinates:
 
             if self.counter == 5:
                 self.print_coords()
-                global man_coordinates
                 man_coordinates[:, :, self.id] = np.asarray(self.coords)
 
             self.counter += 1

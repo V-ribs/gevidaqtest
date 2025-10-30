@@ -263,7 +263,7 @@ class PMT_zscan:
         for self.each_pos_index in range(len(self.z_stack_positions)):
             if self.scanning_flag is True:
                 # Go through each position and get image.
-                self.make_PMT_iamge(
+                self.make_PMT_image(
                     round(self.z_stack_positions[self.each_pos_index], 6)
                 )
             else:
@@ -274,7 +274,7 @@ class PMT_zscan:
     def stop_scan(self):
         self.scanning_flag = False
 
-    def make_PMT_iamge(self, obj_position=None):
+    def make_PMT_image(self, obj_position=None):
         """
         Take PMT image at certain objective position.
 

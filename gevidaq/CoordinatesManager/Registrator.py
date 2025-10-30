@@ -147,10 +147,10 @@ class DMDRegistator:
                 + ".png",
                 image,
             )
-            camera_coordinates[
-                i, :
-            ] = readRegistrationImages.touchingCoordinateFinder(
-                image, method="curvefit"
+            camera_coordinates[i, :] = (
+                readRegistrationImages.touchingCoordinateFinder(
+                    image, method="curvefit"
+                )
             )
 
             self.DMD.stop_projection()

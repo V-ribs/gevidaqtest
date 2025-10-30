@@ -30,11 +30,16 @@ from skimage import io
 from ..NIDAQ.constants import MeasurementConstants
 from .camerathread import CameraThread
 from .micromanipulator import ScientificaPatchStar
-from .objective import PIMotor
 from .pressurethread import PressureThread
 from .sealtestthread import SealTestThread
 from .smartpatcher_backend import SmartPatcher
 from .stage import LudlStage
+
+try:
+    from .objective import PIMotor
+except Exception as exc:
+    logging.critical("caught exception", exc_info=exc)
+    logging.info("pipython not configured.")
 
 
 class PatchClampUI(QWidget):

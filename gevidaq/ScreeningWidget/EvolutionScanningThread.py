@@ -918,9 +918,9 @@ class ScanningExecutionThread(QThread):
                                 coordinate["row"] == AF_coord_row
                                 and coordinate["col"] == AF_coord_col
                             ):
-                                coordinate[
-                                    "focus_position"
-                                ] = self.auto_focus_position
+                                coordinate["focus_position"] = (
+                                    self.auto_focus_position
+                                )
                                 logging.info(
                                     "Write founded focus position to next round coord: {}.".format(
                                         coordinate
@@ -1067,9 +1067,9 @@ class ScanningExecutionThread(QThread):
                             coordinate["row"] == AF_coord_row
                             and coordinate["col"] == AF_coord_col
                         ):
-                            coordinate[
-                                "focus_position"
-                            ] = self.auto_focus_position
+                            coordinate["focus_position"] = (
+                                self.auto_focus_position
+                            )
 
                             logging.info(
                                 "Write founded focus position to next round coord: {}.".format(

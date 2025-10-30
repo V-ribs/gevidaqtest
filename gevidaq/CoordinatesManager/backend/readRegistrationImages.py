@@ -15,7 +15,6 @@ import numpy as np
 import scipy.optimize
 import scipy.signal
 import skimage.exposure
-import skimage.feature
 import skimage.filters
 import skimage.restoration
 

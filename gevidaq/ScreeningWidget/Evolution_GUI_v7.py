@@ -1434,9 +1434,9 @@ class Mainbody(QtWidgets.QWidget):
         FocusCorrectionMatrixDict = {}  # self.upsize_focus_matrix()
 
         # Refresh the focus correction
-        self.GeneralSettingDict[
-            "FocusCorrectionMatrixDict"
-        ] = FocusCorrectionMatrixDict
+        self.GeneralSettingDict["FocusCorrectionMatrixDict"] = (
+            FocusCorrectionMatrixDict
+        )
 
         # if saving directory is re-configured, refresh it, otherwise keep as it is.
         self.auto_saving_directory()

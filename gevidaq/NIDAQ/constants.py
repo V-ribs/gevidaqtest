@@ -37,6 +37,7 @@ class NiDaqChannels:
             "488AO": "Dev2/ao1",
             "532AO": "Dev2/ao0",
             "patchAO": "Dev2/ao2",  # Output to patch clamp probe, patchVoltInChannel
+            "fieldstimulator": "Dev2/ao3",  # Output to fieldstimulator electrodes
             "cameratrigger": "Dev1/port0/line25",
             "galvotrigger": "Dev1/port0/line25",
             "blankingall": "Dev1/port0/line4",
@@ -59,6 +60,9 @@ class NiDaqChannels:
             "trigger1Channel": "/Dev1/PFI2",
             "clock2Channel": "/Dev2/PFI1",
             "trigger2Channel": "/Dev2/PFI7",
+            "532 servo": "/Dev1/port0/line8",
+            "640 servo": "/Dev1/port0/line9",
+            "488 servo": "/Dev1/port0/line10",
         }
 
         # self.patchVoltOutChannel = "Dev1/ai22"

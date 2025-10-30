@@ -13,9 +13,9 @@ from PyQt5 import QtWidgets
 from PyQt5.QtCore import Qt, pyqtSignal
 from PyQt5.QtGui import QColor, QFont, QPalette
 from PyQt5.QtWidgets import (
+    QDoubleSpinBox,
     QGridLayout,
     QLabel,
-    QDoubleSpinBox,
     QSlider,
     QStackedLayout,
     QWidget,
@@ -23,7 +23,6 @@ from PyQt5.QtWidgets import (
 
 from .. import Icons, StylishQT
 from .DAQoperator import DAQmission
-from .ServoMotor import Servo
 
 
 class AOTFLaserUI(QWidget):
@@ -41,6 +40,7 @@ class AOTFLaserUI(QWidget):
         self.wavelength = f"{wavelength}"
         self.channel = f"{wavelength}AO"
         self.blanking_channel = f"{wavelength}blanking"
+        self.servo_channel = f"{wavelength} servo"
         self.signal = signal
         self.lasers_status = lasers_status
 
@@ -107,14 +107,8 @@ class AOTFLaserUI(QWidget):
         self.sig_lasers_status_changed.emit(self.lasers_status)
 
     def shutter_CW_action(self):
-        if self.wavelength == "488":  # only servo for blue laser is set up
-            servo = Servo()
-            if self.shutterButton.isChecked():
-                servo.rotate(target_servo="servo_modulation_1", degree=180)
-            else:
-                servo.rotate(target_servo="servo_modulation_1", degree=0)
-        else:
-            logging.info(f"shutter for {self.wavelength} laser is not set up")
+        daq = DAQmission()
+        daq.sendServoSignal(self.servo_channel, self.shutterButton.isChecked())
 
 
 class AOTFWidgetUI(QWidget):

@@ -297,6 +297,7 @@ if __name__ == "__main__":
     time.sleep(3.5)
     cam.isSaving = True
     tif_name = r"M:\tnw\ist\do\projects\Neurophotonics\Brinkslab\Data\test.tif"  # TODO hardcoded path
+    tif_name = r"M:/tnw/ist/do/projects/Neurophotonics/Brinkslab/Data/Patch clamp/2024_05_07 Ian Test/test_123.tif"  # TODO hardcoded path
     cam.StopStreaming(saving_dir=tif_name)
     # Make sure that the saving process is finished.
     while cam.isSaving is True:

@@ -1,6 +1,5 @@
-"""global settings for NIDAQ
+"""global settings for NIDAQ"""
 
-"""
 from ..Settings.settings import settings
 
 defaults = {
@@ -48,7 +47,7 @@ defaults = {
         "trigger1Channel": "/Dev1/PFI2",
         "clock2Channel": "/Dev2/PFI1",
         "trigger2Channel": "/Dev2/PFI7",
-    }
+    },
     # self.patchVoltOutChannel = "Dev1/ai22"
     # self.patchCurOutChannel = "Dev1/ai20"
     # self.patchVoltInChannel = 'Dev2/ao2'

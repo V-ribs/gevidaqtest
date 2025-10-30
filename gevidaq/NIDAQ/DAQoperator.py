@@ -9,6 +9,7 @@ Created on Fri May 29 15:29:22 2020
 
 import logging
 import os
+import time
 from datetime import datetime
 
 import nidaqmx
@@ -56,13 +57,13 @@ class DAQmission(QThread):
 
         """
 
-        self.channelname = self.channel_LUT[channel]
-        self.writting_value = value
+        channelname = self.channel_LUT[channel]
+        writing_value = value
 
         # Assume that dev1 is always employed
         with nidaqmx.Task() as writingtask:
-            writingtask.ao_channels.add_ao_voltage_chan(self.channelname)
-            writingtask.write(self.writting_value)
+            writingtask.ao_channels.add_ao_voltage_chan(channelname)
+            writingtask.write(writing_value)
 
     def sendSingleDigital(self, channel, value):
         """
@@ -79,15 +80,55 @@ class DAQmission(QThread):
 
         """
 
-        self.channelname = self.channel_LUT[channel]
+        channelname = self.channel_LUT[channel]
         if value is True:
-            writting_value = np.array([1], dtype=bool)
+            writing_value = np.array([1], dtype=bool)
         else:
-            writting_value = np.array([0], dtype=bool)
+            writing_value = np.array([0], dtype=bool)
 
         with nidaqmx.Task() as writingtask:
-            writingtask.do_channels.add_do_chan(self.channelname)
-            writingtask.write(writting_value)
+            writingtask.do_channels.add_do_chan(channelname)
+            writingtask.write(writing_value)
+
+    def sendServoSignal(self, servo_channel: str, open_servo: bool):
+        """
+        Opens (open_servo=True), or closes (open_servo=False) the beam path servo_channel.
+        """
+        sample_rate = 50000
+        total_duration = 0.25
+        frequency = 50
+
+        # set signal parameters
+        if open_servo:
+            high_time = 0.002
+            low_time = 0.018
+        if not open_servo:
+            high_time = 0.001
+            low_time = 0.019
+
+        num_cycles = int(total_duration * frequency)
+
+        high_samples = int(high_time * sample_rate)
+        low_samples = int(low_time * sample_rate)
+        pulse = [True] * high_samples + [False] * low_samples
+        signal = pulse * num_cycles
+
+        # write waveform
+        channelname = self.channel_LUT[servo_channel]
+
+        with nidaqmx.Task() as writingtask:
+            writingtask.do_channels.add_do_chan(
+                channelname,
+                line_grouping=nidaqmx.constants.LineGrouping.CHAN_FOR_ALL_LINES,
+            )
+            writingtask.timing.cfg_samp_clk_timing(
+                sample_rate,
+                sample_mode=nidaqmx.constants.AcquisitionType.FINITE,
+                samps_per_chan=len(signal),
+            )
+            writingtask.write(signal, auto_start=False)
+            writingtask.start()
+            time.sleep(total_duration)
 
     def runWaveforms(
         self,
@@ -128,7 +169,7 @@ class DAQmission(QThread):
         self.readin_channels = readin_channels
         self.sampling_rate = sampling_rate
 
-        # galvosx and galvosy as specification key words are already enough.
+        # galvosx and galvosy as Sepcification key words are already enough.
 
         # Get the average number and y pixel number information from data
         self.galvosx_originalkey = "galvosx"
@@ -310,7 +351,12 @@ class DAQmission(QThread):
         # Analog signal in Dev 1 is involved
         """
         if Dev1_analog_channel_number != 0:
-            with nidaqmx.Task() as slave_Task_1_analog_dev1, nidaqmx.Task() as slave_Task_1_analog_dev2, nidaqmx.Task() as master_Task_readin, nidaqmx.Task() as slave_Task_2_digitallines:
+            with (
+                nidaqmx.Task() as slave_Task_1_analog_dev1,
+                nidaqmx.Task() as slave_Task_1_analog_dev2,
+                nidaqmx.Task() as master_Task_readin,
+                nidaqmx.Task() as slave_Task_2_digitallines,
+            ):
                 # === adding channels ===
                 # Set tasks from different devices apart
                 for i in range(Dev1_analog_channel_number):
@@ -627,7 +673,11 @@ class DAQmission(QThread):
             # Only Dev 2 is involved  in sending analog signals
             """
         elif Dev2_analog_channel_number != 0:
-            with nidaqmx.Task() as slave_Task_1_analog_dev2, nidaqmx.Task() as master_Task_readin, nidaqmx.Task() as slave_Task_2_digitallines:
+            with (
+                nidaqmx.Task() as slave_Task_1_analog_dev2,
+                nidaqmx.Task() as master_Task_readin,
+                nidaqmx.Task() as slave_Task_2_digitallines,
+            ):
                 # adding channels
                 # Set tasks from different devices apart
                 slave_Task_2_digitallines.do_channels.add_do_chan(

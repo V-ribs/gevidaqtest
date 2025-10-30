@@ -278,7 +278,7 @@ ALP_PROJ_PROGRESS = 2318  # (AlpProjInquireEx) inquire detailled progress of the
 ALP_PROJ_RESET_QUEUE = 2319  # Remove all enqueued sequences from the queue. The currently running sequence is not affected. ControlValue must be ALP_DEFAULT
 ALP_PROJ_ABORT_SEQUENCE = 2320  # abort the current sequence (ControlValue=ALP_DEFAULT) or a specific sequence (ControlValue=QueueID); abort after last frame of current iteration
 ALP_PROJ_ABORT_FRAME = 2321  # similar, but abort after next frame
-# 	Only one abort request can be active at a time. If it is requested to
+# Only one abort request can be active at a time. If it is requested to
 # abort another sequence before the old request is completed, then
 # AlpProjControl returns ALP_NOT_IDLE. (Please note, that AlpProjHalt
 # and AlpDevHalt work anyway.) If the QueueID points to a sequence
