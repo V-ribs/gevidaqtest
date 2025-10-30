@@ -998,7 +998,6 @@ class WaveformGenerator(QWidget):
         elif self.wavetabs.currentIndex() == 2:
 
             if self.galvos_tabs.currentIndex() == 0:
-
                 self.waveform_data_dict[channel_keyword] = (
                     self.generate_galvos()
                 )
@@ -1008,7 +1007,6 @@ class WaveformGenerator(QWidget):
                 )
 
             elif self.galvos_tabs.currentIndex() == 1:  # For contour
-
                 self.waveform_data_dict["galvos_contour"] = (
                     self.generate_contour_for_waveform()
                 )

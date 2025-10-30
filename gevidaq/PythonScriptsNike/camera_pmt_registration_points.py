@@ -1,4 +1,5 @@
-"""Make sure to always perform a new refistration as soon as the hardware has changed or moved!"""
+# Make sure to always perform a new registration as soon as the hardware has
+# changed or moved!
 
 
 class CameraPmtRegistrationPoints:

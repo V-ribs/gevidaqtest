@@ -51,7 +51,9 @@ class ImageAnalyzer:
         plt.draw()
 
     def resize_contour(self, contour, scaling_factor):
-        """Resize the contour without crossing existing contours and unfold when increasing size."""
+        """Resize the contour without crossing existing contours and unfold
+        when increasing size.
+        """
         # Create a polygon from the contour
         polygon = Polygon(contour)
 
@@ -84,7 +86,9 @@ class ImageAnalyzer:
         return scaled_contour
 
     def find_contour(self, image, threshold, num_points=100):
-        """Find the largest contour in the image based on the given intensity threshold."""
+        """Find the largest contour in the image based on the given intensity
+        threshold.
+        """
         contours = find_contours(image, threshold)
         largest_contour = max(contours, key=len)
 
@@ -106,7 +110,9 @@ class ImageAnalyzer:
         maximum_intensity,
         number_of_contours,
     ):
-        """Display multiple contours in the image based on the given intensity thresholds."""
+        """Display multiple contours in the image based on the given intensity
+        thresholds.
+        """
         colors = plt.colormaps.get_cmap("Blues")(
             np.linspace(0.3, 1, number_of_contours + 1)
         )
@@ -141,7 +147,8 @@ class ImageAnalyzer:
         x_extended = np.concatenate([x[-window_size:], x, x[:window_size]])
         y_extended = np.concatenate([y[-window_size:], y, y[:window_size]])
 
-        # Apply moving average with 'same' mode to maintain same number of points
+        # Apply moving average with 'same' mode to maintain same number of
+        # points
         kernel = np.ones(window_size) / window_size
         x_smooth = np.convolve(x_extended, kernel, mode="same")
         y_smooth = np.convolve(y_extended, kernel, mode="same")

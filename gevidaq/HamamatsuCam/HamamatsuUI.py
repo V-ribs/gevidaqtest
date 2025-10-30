@@ -191,9 +191,11 @@ class CameraUI(QMainWindow):
 
         Label_readoutspeed = QLabel("Readout speed")
         Label_readoutspeed.setToolTip(
-            "The standard scan readout speed can achieve a frame rate of 100 fps for full resolution with low noise (1.0 electrons (median),\
-        1.6 electrons (r.m.s.)), and the slow scan readout speed can achieve even lower noise (0.8 electrons (median), 1.4 electrons (r.m.s.))\
-        with a frame rate of 30 fps for full resolution."
+            "The standard scan readout speed can achieve a frame rate of 100 "
+            "fps for full resolution with low noise (1.0 electrons (median), "
+            "1.6 electrons (r.m.s.)), and the slow scan readout speed can "
+            "achieve even lower noise (0.8 electrons (median), 1.4 electrons "
+            "(r.m.s.)) with a frame rate of 30 fps for full resolution."
         )
         CameraSettingTab_1.layout.addWidget(Label_readoutspeed, 2, 0)
         self.ReadoutSpeedSwitchButton = StylishQT.MySwitch(
@@ -213,9 +215,12 @@ class CameraUI(QMainWindow):
             self.DefectCorrectionSwitchEvent
         )
         self.DefectCorrectionButton.setToolTip(
-            "There are a few pixels in CMOS image sensor that have slightly higher readout noise performance compared to surrounding pixels.\
-        And the extended exposures may cause a few white spots which is caused by failure in part of the silicon wafer in CMOS image sensor.\
-        The camera has real-time variant pixel correction features to improve image quality."
+            "There are a few pixels in CMOS image sensor that have slightly "
+            "higher readout noise performance compared to surrounding pixels. "
+            "And the extended exposures may cause a few white spots which is "
+            "caused by failure in part of the silicon wafer in CMOS image "
+            "sensor. The camera has real-time variant pixel correction "
+            "features to improve image quality."
         )
         CameraSettingTab_1.layout.addWidget(self.DefectCorrectionButton, 2, 3)
 
@@ -241,7 +246,8 @@ class CameraUI(QMainWindow):
 
         Label_binning = QLabel("Binning:")
         Label_binning.setToolTip(
-            "Binning readout is a method for achieving high sensitivity in exchange for losing resolution."
+            "Binning readout is a method for achieving high sensitivity in "
+            "exchange for losing resolution."
         )
         CameraImageFormatLayout.addWidget(Label_binning, 0, 0)
         CameraImageFormatLayout.addWidget(self.BinningButton_1, 0, 1)
@@ -304,7 +310,8 @@ class CameraUI(QMainWindow):
 
         label_sub_array_mode_switch = QLabel("Readout region:")
         label_sub_array_mode_switch.setToolTip(
-            "Sub-array readout is a procedure only a region of interest is scanned; while full size images whole frame."
+            "Sub-array readout is a procedure only a region of interest is "
+            "scanned; while full size images whole frame."
         )
         CameraSettingTab_2.layout.addWidget(label_sub_array_mode_switch, 0, 0)
         self.SubArrayModeSwitchButton = StylishQT.MySwitch(
@@ -326,7 +333,8 @@ class CameraUI(QMainWindow):
         self.center_roiButton = QPushButton()
         self.center_roiButton.setText("Symmetric to Center Line")
         self.center_roiButton.setToolTip(
-            "In normal configuration, place ROI symmetric to chip center line to achieve fastest frame rate."
+            "In normal configuration, place ROI symmetric to chip center line "
+            "to achieve fastest frame rate."
         )
         self.center_roiButton.clicked.connect(lambda: self.set_roi_flag())
         """
@@ -415,9 +423,7 @@ class CameraUI(QMainWindow):
         CameraSettingTab_2.layout.addWidget(self.ClearROIButton, 4, 2, 1, 2)
         CameraSettingTab_2.setLayout(CameraSettingTab_2.layout)
 
-        """
-        === Timing tab ===
-        """
+        # === Timing tab ===
         CameraSettingTab_3 = QWidget()
         CameraSettingTab_3.layout = QGridLayout()
 
@@ -487,10 +493,7 @@ class CameraUI(QMainWindow):
         )
         CameraSettingTab_3.setLayout(CameraSettingTab_3.layout)
 
-        """
-        === Registration tab ===
-        """
-
+        # === Registration tab ===
         CameraSettingTab_4 = QWidget()
         CameraSettingTab_4.layout = QGridLayout()
 
@@ -892,7 +895,8 @@ class CameraUI(QMainWindow):
         CamLiveActionLayout = QGridLayout()
 
         # self.LiveSwitchLabel = QLabel("Live switch:")
-        # self.LiveSwitchLabel.setStyleSheet("QLabel { color : navy; font-size: 10pt; }")
+        # self.LiveSwitchLabel.setStyleSheet(
+        # "QLabel { color : navy; font-size: 10pt; }")
         # self.LiveSwitchLabel.setFixedHeight(45)
         # self.LiveSwitchLabel.setAlignment(Qt.AlignCenter)
         # CamLiveActionLayout.addWidget(self.LiveSwitchLabel, 0, 0)
@@ -969,7 +973,8 @@ class CameraUI(QMainWindow):
             ["Stop signal: Time", "Stop signal: Frames"]
         )
         self.StreamStopSignalComBox.setToolTip(
-            "End acquisition after getting certain number of frames or pre-set time is past."
+            "End acquisition after getting certain number of frames or "
+            "pre-set time is past."
         )
         CamStreamActionLayout.addWidget(self.StreamStopSignalComBox, 1, 0)
 
@@ -1082,8 +1087,19 @@ class CameraUI(QMainWindow):
         self.CamStreamSaving_progressbar.setMaximumWidth(250)
         self.CamStreamSaving_progressbar.setMaximum(100)
         self.CamStreamSaving_progressbar.setStyleSheet(
-            "QProgressBar {color: black;border: 1px solid grey; border-radius:3px;text-align: center;}"
-            "QProgressBar::chunk {background-color: #E6E6FA; width: 5px; margin: 1px;}"
+            """
+            QProgressBar {
+                color: black;
+                border: 1px solid grey;
+                border-radius:3px;
+                text-align: center;
+            }
+            QProgressBar::chunk {
+                background-color: #E6E6FA;
+                width: 5px;
+                margin: 1px;
+            }
+            """
         )
         CamStreamSavingWidget.layout.addWidget(
             self.CamStreamSaving_progressbar, 0, 1, 1, 4
@@ -1104,7 +1120,14 @@ class CameraUI(QMainWindow):
         CameraAcquisitionTab.addTab(CameraAcquisitionTab_1, "Live")
         CameraAcquisitionTab.addTab(CameraAcquisitionTab_2, "Stream")
         CameraAcquisitionTab.setStyleSheet(
-            "QTabBar { width: 200px; font-size: 8pt; font: bold; color: #003366}"
+            """
+            QTabBar {
+                width: 200px;
+                font-size: 8pt;
+                font: bold;
+                color: #003366
+            }
+            """
         )
         self.AcquisitionROIstackedWidget.addWidget(CameraAcquisitionTab)
 
@@ -1136,11 +1159,9 @@ class CameraUI(QMainWindow):
 
         CameraAcquisitionContainer.setLayout(CameraAcquisitionLayout)
 
-        """
         # === Live Screen ===
-        # Initiating an imageview object for the main Livescreen. Hiding the pre
-        # existing ROI and menubuttons.
-        """
+        # Initiating an imageview object for the main Livescreen. Hiding the
+        # pre existing ROI and menubuttons.
         LiveWidgetContainer = QGroupBox()
         LiveWidgetContainer.setMinimumHeight(920)
         LiveWidgetContainer.setMinimumWidth(950)
@@ -1178,7 +1199,8 @@ class CameraUI(QMainWindow):
         left_layout.addWidget(CameraImageInspectionContainer)
         left_layout.addWidget(CameraAcquisitionContainer)
 
-        # Add a stretch at the end to push any remaining space below the lowest container
+        # Add a stretch at the end to push any remaining space below the lowest
+        # container
         left_layout.addStretch()
 
         # Add the left layout to the main layout
@@ -1211,7 +1233,8 @@ class CameraUI(QMainWindow):
             ctypes.byref(paraminit)
         )  # TODO unused
         # if (error_code != DCAMERR_NOERROR):
-        # raise DCAMException("DCAM initialization failed with error code " + str(error_code))
+        # raise DCAMException(
+        # f"DCAM initialization failed with error code {error_code}")
 
         n_cameras = paraminit.iDeviceCount
 
@@ -1402,8 +1425,9 @@ class CameraUI(QMainWindow):
         )
 
     def ReadoutSpeedSwitchEvent(self):
-        """
-        Set the readout speed. Default is fast, corresponding to 2 in "readout_speed".
+        """Set the readout speed.
+
+        Default is fast, corresponding to 2 in "readout_speed".
         """
         if self.ReadoutSpeedSwitchButton.isChecked():
             self.hcam.setPropertyValue("defect_correct_mode", 2)
@@ -1411,12 +1435,19 @@ class CameraUI(QMainWindow):
             self.hcam.setPropertyValue("defect_correct_mode", 1)
 
     def DefectCorrectionSwitchEvent(self):
-        """
-        There are a few pixels in CMOS image sensor that have slightly higher readout noise performance compared to surrounding pixels.
-        And the extended exposures may cause a few white spots which is caused by failure in part of the silicon wafer in CMOS image sensor.
-        The camera has real-time variant pixel correction features to improve image quality.
-        The correction is performed in real-time without sacrificing the readout speed at all. This function can be turned ON and OFF. (Default is ON)
-        User can choose the correction level for white spots depend on the exposure time.
+        """Switch defect correction.
+
+        There are a few pixels in CMOS image sensor that have slightly higher
+        readout noise performance compared to surrounding pixels.
+        And the extended exposures may cause a few white spots which is caused
+        by failure in part of the silicon wafer in CMOS image sensor.
+        The camera has real-time variant pixel correction features to improve
+        image quality.
+        The correction is performed in real-time without sacrificing the
+        readout speed at all. This function can be turned ON and OFF.
+        (Default is ON)
+        User can choose the correction level for white spots depend on the
+        exposure time.
         """
         if self.DefectCorrectionButton.isChecked():
             self.hcam.setPropertyValue("readout_speed", 1)
@@ -1440,7 +1471,8 @@ class CameraUI(QMainWindow):
 
             if ui_exposure_time < readout_time:
                 logging.warning(
-                    "Trying to set an exposure time that's less than the readout time. Setting exposure time to readout time."
+                    "Trying to set an exposure time that's less than the"
+                    "readout time. Setting exposure time to readout time."
                 )
                 ui_exposure_time = readout_time
 
@@ -1522,7 +1554,8 @@ class CameraUI(QMainWindow):
                         self.ROI_vpos_spinbox.value() == 0
                         and self.ROI_vsize_spinbox.value() == 2048
                     ):
-                        # If it's the first time opening ROI selector, respawn it at a imageview center.
+                        # If it's the first time opening ROI selector, respawn
+                        # it at a imageview center.
                         self.ROIitem = pg.RectROI(
                             [924, 924],
                             [200, 200],
@@ -1530,16 +1563,24 @@ class CameraUI(QMainWindow):
                             sideScalers=True,
                             pen=ROIpen,
                         )
-                        # Create text object, use HTML tags to specify color/size
+                        # Create text object, use HTML tags to specify
+                        # color/size
                         self.ROIitemText = pg.TextItem(
-                            html='<div style="text-align: center"><span style="color: #FFF;">Estimated max fps: </span><span style="color: #FF0; \
-                            font-size: 10pt;">0</span></div>',
+                            html="""
+                                <div style="text-align: center">
+                                    <span style="color: #FFF;"
+                                        >Estimated max fps: </span>
+                                    <span style="color: #FF0; font-size: 10pt;"
+                                        >0</span>
+                                </div>
+                            """,
                             anchor=(1, 1),
                         )
                         self.ROIitemText.setPos(924, 924)
 
                     else:
-                        # If in the ROI position spinboxes there are numbers left from last ROI selection
+                        # If in the ROI position spinboxes there are numbers
+                        # left from last ROI selection
                         self.ROIitem = pg.RectROI(
                             [
                                 self.ROI_hpos_spinbox.value(),
@@ -1553,10 +1594,17 @@ class CameraUI(QMainWindow):
                             sideScalers=True,
                             pen=ROIpen,
                         )
-                        # Create text object, use HTML tags to specify color/size
+                        # Create text object, use HTML tags to specify
+                        # color/size
                         self.ROIitemText = pg.TextItem(
-                            html='<div style="text-align: center"><span style="color: #FFF;">Estimated max fps: </span><span style="color: #FF0; \
-                            font-size: 10pt;">0</span></div>',
+                            html="""
+                                <div style="text-align: center">
+                                    <span style="color: #FFF;"
+                                        >Estimated max fps: </span>
+                                    <span style="color: #FF0; font-size: 10pt;"
+                                        >0</span>
+                                </div>
+                            """,
                             anchor=(1, 1),
                         )
                         self.ROIitemText.setPos(
@@ -1580,8 +1628,14 @@ class CameraUI(QMainWindow):
                     )
                     # Create text object, use HTML tags to specify color/size
                     self.ROIitemText = pg.TextItem(
-                        html='<div style="text-align: center"><span style="color: #FFF;">Estimated max fps: </span><span style="color: #FF0; \
-                        font-size: 10pt;">0</span></div>',
+                        html="""
+                                <div style="text-align: center">
+                                    <span style="color: #FFF;"
+                                        >Estimated max fps: </span>
+                                    <span style="color: #FF0; font-size: 10pt;"
+                                        >0</span>
+                                </div>
+                            """,
                         anchor=(1, 1),
                     )
                     self.ROIitemText.setPos(
@@ -1599,8 +1653,14 @@ class CameraUI(QMainWindow):
                 )
                 # Create text object, use HTML tags to specify color/size
                 self.ROIitemText = pg.TextItem(
-                    html='<div style="text-align: center"><span style="color: #FFF;">Estimated max fps: </span><span style="color: #FF0; \
-                    font-size: 10pt;">0</span></div>',
+                    html="""
+                                <div style="text-align: center">
+                                    <span style="color: #FFF;"
+                                        >Estimated max fps: </span>
+                                    <span style="color: #FF0; font-size: 10pt;"
+                                        >0</span>
+                                </div>
+                            """,
                     anchor=(0, 0),
                 )
 
@@ -1611,9 +1671,11 @@ class CameraUI(QMainWindow):
             self.ROIitem.sigRegionChanged.connect(
                 self.update_ROI_spinbox_coordinates
             )
-            # This function ensures the spinboxes show the actual roi coordinates
+            # This function ensures the spinboxes show the actual roi
+            # coordinates
 
-            # Note that clicking is disabled by default to prevent stealing clicks from objects behind the ROI.
+            # Note that clicking is disabled by default to prevent stealing
+            # clicks from objects behind the ROI.
             # self.ROIitem.setAcceptedMouseButtons(Qt.LeftButton)
             # self.ROIitem.sigClicked.connect(self.ShowROIImage)
 
@@ -1646,8 +1708,8 @@ class CameraUI(QMainWindow):
             self.ROIitem.sigRegionChanged.disconnect()
             """
             I do not know how to disconnect one specific function, so I
-            disconnect both and then reconnect the update_ROI_spinbox_coordinates
-            function.
+            disconnect both and then reconnect the
+            update_ROI_spinbox_coordinates function.
             """
             self.ROIitem.sigRegionChanged.connect(
                 self.update_ROI_spinbox_coordinates
@@ -1680,8 +1742,13 @@ class CameraUI(QMainWindow):
 
         # Create text object, use HTML tags to specify color/size
         self.ROIitemText = pg.TextItem(
-            html='<div style="text-align: center"><span style="color: #FFF;">Estimated max fps: </span><span style="color: #FF0; \
-            font-size: 10pt;">{}</span></div>'.format(
+            html="""
+                <div style="text-align: center">
+                    <span style="color: #FFF;"
+                        >Estimated max fps: </span>
+                    <span style="color: #FF0; font-size: 10pt;"
+                        >{}</span></div>
+            """.format(
                 round(self.ROIEstimatedMaxFPS, 2)
             ),
             anchor=(1, 1),
@@ -1782,16 +1849,19 @@ class CameraUI(QMainWindow):
 
         # Log key properties after setting the ROI
         logging.info(
-            f"ROI set to: hsize={self.ROI_hsize}, vsize={self.ROI_vsize}, hpos={self.ROI_hpos}, vpos={self.ROI_vpos}"
+            f"ROI set to: hsize={self.ROI_hsize}, vsize={self.ROI_vsize}, "
+            f"hpos={self.ROI_hpos}, vpos={self.ROI_vpos}"
         )
         logging.info(
             f"Subarray mode: {self.hcam.getPropertyValue('subarray_mode')[0]}"
         )
         logging.info(
-            f"Internal frame rate: {self.hcam.getPropertyValue('internal_frame_rate')[0]}"
+            "Internal frame rate: "
+            f"{self.hcam.getPropertyValue('internal_frame_rate')[0]}"
         )
         logging.info(
-            f"Readout speed: {self.hcam.getPropertyValue('timing_readout_time')[0]}"
+            f"Readout speed: "
+            f"{self.hcam.getPropertyValue('timing_readout_time')[0]}"
         )
         logging.info(
             f"Exposure time: {self.hcam.getPropertyValue('exposure_time')[0]}"
@@ -1955,7 +2025,8 @@ class CameraUI(QMainWindow):
 
         if self.cameraIsStreaming:
             logging.info(
-                "Trying to snap a picture while streaming. Stop the stream first."
+                "Trying to snap a picture while streaming. Stop the stream "
+                "first."
             )
             return
 
@@ -1995,10 +2066,13 @@ class CameraUI(QMainWindow):
         self.refresh_live_image(self.Live_image)
 
     def on_snap_error(self, error_message):
-        logging.info(f"Error: {error_message}")
+        logging.error(f"Error: {error_message}")
 
     def ResetLiveImgView(self):
-        """Closes the widget nicely, making sure to clear the graphics scene and release memory."""
+        """Closes the widget nicely.
+
+        Makes sure to clear the graphics scene and release memory.
+        """
         self.LiveWidget.close()
 
         # Replot the imageview
@@ -2037,7 +2111,8 @@ class CameraUI(QMainWindow):
         max_fps = 1 / self.hcam.getPropertyValue("timing_readout_time")[0]
         if self.desired_fps_spinbox.value() > max_fps:
             logging.warning(
-                "Desired fps is higher than the max internal frame rate. Please decrease the ROI size or the desired fps."
+                "Desired fps is higher than the max internal frame rate. "
+                "Please decrease the ROI size or the desired fps."
             )
             return False
         elif (0 < self.desired_fps_spinbox.value()) and (
@@ -2047,7 +2122,8 @@ class CameraUI(QMainWindow):
             if self.TriggerButton_1.isChecked():
                 desired_exposure_time = 1 / self.desired_fps_spinbox.value()
                 logging.info(
-                    f"Desired fps is valid. Setting exposure time to {desired_exposure_time} s."
+                    "Desired fps is valid. Setting exposure time to "
+                    f"{desired_exposure_time} s."
                 )
                 self.hcam.setPropertyValue(
                     "exposure_time", desired_exposure_time
@@ -2339,7 +2415,8 @@ class CameraUI(QMainWindow):
             # Reset any other states (like the stored live image)
             self.Live_image = None
 
-            # Disconnect the mouse click event handler to prevent updates after clearing the image
+            # Disconnect the mouse click event handler to prevent updates
+            # after clearing the image
             if self.mouse_click_connection is not None:
                 try:
                     self.Live_item.scene().sigMouseClicked.disconnect(
@@ -2455,7 +2532,8 @@ class CameraUI(QMainWindow):
             self.x_label.setText(f"X-coordinate: {self.x_pixel}")
             self.y_label.setText(f"Y-coordinate: {self.y_pixel}")
             self.contourCreationProgress.setText(
-                f"Point {self.current_index}/{self.contourSize} added: ({self.x_pixel}, {self.y_pixel})"
+                f"Point {self.current_index}/{self.contourSize} added: "
+                f"({self.x_pixel}, {self.y_pixel})"
             )
 
             # Update the ROI contour dynamically
@@ -2553,7 +2631,8 @@ class CameraUI(QMainWindow):
             self.contourSize = int(user_input)
 
             if self.contourSize < 3:
-                # QMessageBox.warning(self, "Error", "Please enter a positive integer greater than 2.")
+                # QMessageBox.warning(self, "Error", "Please enter a positive
+                # integer greater than 2.")
                 inputIsValid = False
             else:
                 inputIsValid = True
@@ -2561,7 +2640,8 @@ class CameraUI(QMainWindow):
             QMessageBox.warning(
                 self,
                 "Error",
-                "Invalid input! Please enter a positive integer greater than 2.",
+                "Invalid input! Please enter a positive integer greater than "
+                "2.",
             )
             inputIsValid = False
 
@@ -2735,8 +2815,8 @@ class CameraUI(QMainWindow):
         self.final_contour_drawn = np.array(interpolated_contour)
 
     def saveCustomContour(self):
-
-        # Create an instance of the CameraPmtMapping class and readout calibration parameters
+        # Create an instance of the CameraPmtMapping class and readout
+        # calibration parameters
         self.camera_pmt_mapping = CameraPmtMapping()
         cam_vertices, pmt_vertices = (
             self.registrationPoints.camera_vertices,
@@ -2804,7 +2884,8 @@ class CameraUI(QMainWindow):
     def fit_gaussian_over_camera_img(self):
         if self.cameraIsLive or self.cameraIsStreaming:
             logging.warning(
-                "Please stop the live or stream. A fixed image is required for the registration."
+                "Please stop the live or stream. A fixed image is required "
+                "for the registration."
             )
             return
 
@@ -2812,7 +2893,8 @@ class CameraUI(QMainWindow):
             self._set_registration_params(True)
         else:
             logging.warning(
-                "No live image available. Please make sure a snapshot of the registration image is presented."
+                "No live image available. Please make sure a snapshot of the "
+                "registration image is presented."
             )
 
     def _set_registration_params(self, set_params):
@@ -3086,9 +3168,8 @@ class SaveWorker(QObject):
                     progress = int((i + batch_size) / self.image_count * 100)
                     self.update_progress.emit(progress)
 
-            logging.info(
-                f"Done writing frames. Total time: {round(time.time() - write_starttime, 2)} sec."
-            )
+            totaltime = round(time.time() - write_starttime, 2)
+            logging.info(f"Done writing frames. Total time: {totaltime} sec.")
             self.finished.emit()
 
         except Exception as exc:

@@ -10,12 +10,10 @@ Created on Tue Aug 18 13:54:51 2020
 # --2. Bisection to find the optimal.
 
 import logging
-import os
 import time
 
 import matplotlib.pyplot as plt
 import numpy as np
-import tifffile as skimtiff
 
 from ..GalvoWidget.GalvoScan_backend import RasterScan
 from ..HamamatsuCam.HamamatsuActuator import CamActuator
@@ -44,7 +42,8 @@ class FocusFinder:
         source_of_image : string, optional
             The input source of image. The default is PMT.
         init_search_range : int, optional
-            The step size when first doing coarse searching. The default is 0.010.
+            The step size when first doing coarse searching.
+            The default is 0.010.
         total_step_number : int, optional
             Number of steps in total to find optimal focus. The default is 5.
         imaging_conditions : list
@@ -190,7 +189,8 @@ class FocusFinder:
                     "bot": [lower_position, degree_of_focus_low],
                 }
 
-            # In the next rounds, only need to go to center and update boundaries.
+            # In the next rounds, only need to go to center and update
+            # boundaries.
             elif step_index > 1:
                 # The upper edge in which we run bisection.
                 upper_position = biesection_range_dic["top"][0]
@@ -252,15 +252,6 @@ class FocusFinder:
             plt.imshow(self.galvo_image)
             plt.show()
 
-            if False:
-                with skimtiff.TiffWriter(
-                    os.path.join(
-                        r"M:\tnw\ist\do\projects\Neurophotonics\Brinkslab\People\Xin Meng\paperwork\Dissertation\Figures\Chapter 4\Bisection\data\trial2",  # TODO hardcoded path
-                        str(obj_position).replace(".", "_") + ".tif",
-                    )
-                ) as tif:
-                    tif.save(self.galvo_image.astype("float32"), compress=0)
-
             degree_of_focus = ProcessImage.local_entropy(
                 self.galvo_image.astype("float32")
             )
@@ -293,15 +284,6 @@ class FocusFinder:
             plt.figure()
             plt.imshow(self.camera_image)
             plt.show()
-
-            if False:
-                with skimtiff.TiffWriter(
-                    os.path.join(
-                        r"M:\tnw\ist\do\projects\Neurophotonics\Brinkslab\Data\Xin\2021-03-06 Camera AF\beads",  # TODO hardcoded path
-                        str(obj_position).replace(".", "_") + ".tif",
-                    )
-                ) as tif:
-                    tif.save(self.camera_image.astype("float32"), compress=0)
 
             degree_of_focus = ProcessImage.variance_of_laplacian(
                 self.camera_image.astype("float32")

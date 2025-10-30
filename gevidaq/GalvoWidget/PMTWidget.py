@@ -137,7 +137,8 @@ class PMTWidgetUI(QWidget):
         self.contour_strategy = QComboBox()
         self.contour_strategy.addItems(["Uniform", "Evenly between"])
         self.contour_strategy.setToolTip(
-            "Even in-between: points evenly distribute inbetween handles; Uniform: evenly distribute regardless of handles"
+            "Even in-between: points evenly distribute inbetween handles; "
+            "Uniform: evenly distribute regardless of handles"
         )
         self.pmtContourLayout.addWidget(self.contour_strategy, 0, 3)
         self.pmtContourLayout.addWidget(QLabel("Contour strategy:"), 0, 2)
@@ -765,12 +766,14 @@ class PMTWidgetUI(QWidget):
 
         elif has_camera_generated_contour_voltages and has_click_poly_roi:
             logging.info(
-                "Trying to add a camera generated contour as well as a UI-PMT contour at the same time. This is not allowed.\n"
+                "Trying to add a camera generated contour as well as a UI-PMT "
+                "contour at the same time. This is not allowed."
             )
 
         else:
             logging.info(
-                "Missing contour coordinates. Please generate or create a contour.\n"
+                "Missing contour coordinates. Please generate or create a "
+                "contour."
             )
 
         # Place the signals to the corresponding dictionary position
@@ -823,7 +826,9 @@ class PMTWidgetUI(QWidget):
         self.do_contour_scan.setEnabled(True)
 
     def go_to_first_point(self):
-        """Before executing contour scanning, preset galvo positions to first point."""
+        """Before executing contour scanning, preset galvo positions to first
+        point.
+        """
 
         first_point_x = self.final_stacked_voltage_signals[:, 0][0]
         first_point_y = self.final_stacked_voltage_signals[:, 0][1]
@@ -890,7 +895,9 @@ class PMTWidgetUI(QWidget):
         self.reset_roi_handles()
 
     def generate_contour_coordinates(self, roi_item):
-        """Generate the voltage signals according to current ROI's handle positions."""
+        """Generate the voltage signals according to current ROI's handle
+        positions.
+        """
 
         self.Daq_sample_rate_pmt = int(self.contour_samplerate.value())
         self.ROI_handles = roi_item.getHandles()
@@ -920,7 +927,8 @@ class PMTWidgetUI(QWidget):
                 QMessageBox.warning(
                     self,
                     "generate_contour_coordinates",
-                    "Please input a multiple of the handle number for the contour points.",
+                    "Please input a multiple of the handle number for the "
+                    "contour points.",
                 )
                 return
 
@@ -1038,7 +1046,8 @@ class PMTWidgetUI(QWidget):
 
         if Value_xPixels == 500:
             logging.info(
-                f"Converting coordinates within range [-{Value_voltXMax}, {Value_voltXMax}] V. "
+                f"Converting coordinates within range [-{Value_voltXMax}, "
+                f"{Value_voltXMax}] V. "
             )
 
             # Scale coordinates from pixels to voltages
@@ -1120,9 +1129,12 @@ class PMTWidgetUI(QWidget):
         else:
             message = "Speed too high in direction(s):"
             if exceeded_speeds["X"].size:
-                message += f" X ({np.amax(np.abs(contour_x_speed)):.2f} V/s) at handles {list(exceeded_speeds['X'])}"
+                message += f" X ({np.amax(np.abs(contour_x_speed)):.2f} V/s) "
+                message += f"at handles {list(exceeded_speeds['X'])}"
             if exceeded_speeds["Y"].size:
-                message += f" Y ({np.amax(np.abs(contour_y_speed)):.2f} V/s) at handles {list(exceeded_speeds['Y'])}"
+                message += f" Y ({np.amax(np.abs(contour_y_speed)):.2f} V/s) "
+                message += f"at handles {list(exceeded_speeds['Y'])}"
+
             QMessageBox.warning(self, "Overload", message, QMessageBox.Ok)
 
         # Check galvo acceleration
@@ -1142,9 +1154,13 @@ class PMTWidgetUI(QWidget):
         else:
             message = "Acceleration too high in direction(s): \n"
             if exceeded_accelerations["X"].size:
-                message += f" X ({np.amax(np.abs(contour_x_acceleration)):.2e} V/s²) at handles {list(exceeded_accelerations['X'])} \n"
+                message += f" X ({np.amax(np.abs(contour_x_acceleration)):.2e}"
+                message += " V/s²) at handles "
+                message += f"{list(exceeded_accelerations['X'])} \n"
             if exceeded_accelerations["Y"].size:
-                message += f" Y ({np.amax(np.abs(contour_y_acceleration)):.2e} V/s²) at handles {list(exceeded_accelerations['Y'])}"
+                message += f" Y ({np.amax(np.abs(contour_y_acceleration)):.2e}"
+                message += " V/s²) at handles "
+                message += f"{list(exceeded_accelerations['Y'])}"
             QMessageBox.warning(self, "Overload", message, QMessageBox.Ok)
 
         return not (
@@ -1264,7 +1280,9 @@ class PMTWidgetUI(QWidget):
             )
 
     def emit_contour_signal(self):
-        """Emit generated contour signals to the main widget, then pass to waveform widget."""
+        """Emit generated contour signals to the main widget, then pass to
+        waveform widget.
+        """
 
         self.SignalForContourScanning.emit(
             int(self.points_per_round),
@@ -1281,8 +1299,9 @@ class PMTWidgetUI(QWidget):
         saving_dir = self.savedirectory
         z_depth = self.stack_scanning_depth_spinbox.value()
         z_step_size = self.stack_scanning_stepsize_spinbox.value()
+        sampling_rate = self.stack_scanning_sampling_rate_spinbox.value()
         imaging_conditions = {
-            "Daq_sample_rate": self.stack_scanning_sampling_rate_spinbox.value(),
+            "Daq_sample_rate": sampling_rate,
             "edge_volt": self.stack_scanning_Vrange_spinbox.value(),
             "pixel_number": self.stack_scanning_Pnumber_spinbox.value(),
             "average_number": self.stack_scanning_Avgnumber_spinbox.value(),
