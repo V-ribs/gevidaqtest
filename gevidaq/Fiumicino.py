@@ -3,23 +3,28 @@
 Created on Sat Aug 10 20:54:40 2019
 
 @author: xinmeng
-    ============================== ==============================================
 
-    For general experiments in Dr. Daan's lab ゴゴゴ ゴ ゴ ゴ  ゴ  ゴ
-    ============================== ==============================================
-    == Widget descriptions ==
+============================== ==============================================
+For general experiments in Dr. Daan's lab ゴゴゴ ゴ ゴ ゴ  ゴ  ゴ
+============================== ==============================================
 
-    - HamamatsuCam.HamamatsuUI: Hamamatsu orca flash 4.0 camera user interface.
-    - PatchClamp.ui_patchclamp_sealtest: The GUI for patch clamp.
-    - NIDAQ.WaveformWidget: The GUI for configuring and executing waveforms in National Instrument Data Acquisition (DAQ) device.
-    - GalvoWidget.PMTWidget: For PMT scanning imaging.
-    - ImageAnalysis.AnalysisWidget: Data Analysis widget.
-    - SampleStageControl.StageMoveWidget: The GUI for sample stage movement control.
-    - NIDAQ.AOTFWidget: To control AOTF, which is controlled by NI-daq.
-    - ThorlabsFilterSlider.FilterSliderWidget: Controller for Thorlabs filter slider.
-    - PI_ObjectiveMotor.ObjMotorWidget: Widget for objective motor control.
-    - CoordinatesManager.CoordinatesWidget: Widget to create mask based on widefield image. Project mask with DMD or galvos
-    ============================== ==============================================
+== Widget descriptions ==
+
+- HamamatsuCam.HamamatsuUI: Hamamatsu orca flash 4.0 camera user interface.
+- PatchClamp.ui_patchclamp_sealtest: The GUI for patch clamp.
+- NIDAQ.WaveformWidget: The GUI for configuring and executing waveforms in
+  National Instrument Data Acquisition (DAQ) device.
+- GalvoWidget.PMTWidget: For PMT scanning imaging.
+- ImageAnalysis.AnalysisWidget: Data Analysis widget.
+- SampleStageControl.StageMoveWidget: The GUI for sample stage movement
+  control.
+- NIDAQ.AOTFWidget: To control AOTF, which is controlled by NI-daq.
+- ThorlabsFilterSlider.FilterSliderWidget: Controller for Thorlabs filter
+  slider.
+- PI_ObjectiveMotor.ObjMotorWidget: Widget for objective motor control.
+- CoordinatesManager.CoordinatesWidget: Widget to create mask based on
+  widefield image. Project mask with DMD or galvos
+============================== ==============================================
 """
 import os
 import sys
@@ -47,6 +52,24 @@ from . import (
     ThorlabsKCube,
 )
 
+INIT_META_TEXT = """=========Meta Text======== 
+
+Construct: 
+
+Pipette pulling program: 
+Heat: 
+Velocity: 
+Delay: 
+Pressure: 
+Ramp: 
+
+Two-photon wavelength: 
+Two-photon power: 
+Two-photon ND value: 
+PMT amplification: 
+=======================
+"""  # noqa
+
 
 class Mainbody(QtWidgets.QWidget):
     savedirectory_changed = pyqtSignal(str)
@@ -65,9 +88,8 @@ class Mainbody(QtWidgets.QWidget):
         self.setWindowTitle("Fiumicino")
         self.layout = QtWidgets.QGridLayout(self)
 
-        """
-        # GUI for right tabs panel-Creating instances of each widget showing on right side tabs.
-        """
+        # GUI for right tabs panel-Creating instances of each widget showing on
+        # right side tabs.
         self.tabs = QtWidgets.QTabWidget()
         self.Galvo_WidgetInstance = GalvoWidget.PMTWidget.PMTWidgetUI()
         self.Waveformer_WidgetInstance = (
@@ -99,9 +121,8 @@ class Mainbody(QtWidgets.QWidget):
 
         self.savedirectory = ""
 
-        """
         # GUI for left panel.
-        """
+
         # GUI for set directory
         setdirectoryContainer = StylishQT.roundQGroupBox(title="Set directory")
         self.setdirectorycontrolLayout = QtWidgets.QGridLayout()
@@ -120,8 +141,6 @@ class Mainbody(QtWidgets.QWidget):
         self.prefixtextbox.setPlaceholderText("Prefix")
         self.prefixtextbox.returnPressed.connect(self.set_prefix)
         self.setdirectorycontrolLayout.addWidget(self.prefixtextbox, 0, 0)
-
-        # self.setdirectorycontrolLayout.addWidget(QLabel("Saving prefix:"), 0, 0)
 
         self.toolButtonOpenDialog = QtWidgets.QPushButton()
         with Icons.Path("Browse.png") as path:
@@ -230,14 +249,23 @@ class Mainbody(QtWidgets.QWidget):
         self.layout.addWidget(ObjMotorInstance, 7, 0, 1, 4)
 
         # GUI for camera button
-        # self.open_cam = StylishQT.FancyPushButton(50, 50, color1=(255,153,255), color2=(204,208,255))
+        """
+        self.open_cam = StylishQT.FancyPushButton(
+            50, 50, color1=(255, 153, 255), color2=(204, 208, 255)
+        )
 
-        # self.open_cam.setIcon(QIcon('./Icons/Hamamatsu.png'))
-        # self.open_cam.setToolTip("Open camera widget")
-        # self.open_cam.setIconSize(QSize(60, 60))
-        # self.open_cam.clicked.connect(self.open_camera)
-        # self.layout.addWidget(self.open_cam, 4, 0, 1, 1)
-        # self.open_cam.setGraphicsEffect(QtWidgets.QGraphicsDropShadowEffect(blurRadius=3, xOffset=2, yOffset=2))
+        self.open_cam.setIcon(QIcon("./Icons/Hamamatsu.png"))
+        self.open_cam.setToolTip("Open camera widget")
+        self.open_cam.setIconSize(QSize(60, 60))
+        self.open_cam.clicked.connect(self.open_camera)
+        self.layout.addWidget(self.open_cam, 4, 0, 1, 1)
+        self.open_cam.setGraphicsEffect(
+            QtWidgets.QGraphicsDropShadowEffect(
+                blurRadius=3, xOffset=2, yOffset=2
+            )
+        )
+        """
+
         # GUI for Insight X3
         self.open_Insight = StylishQT.FancyPushButton(
             40, 50, color1=(176, 224, 230), color2=(135, 206, 250)
@@ -343,9 +371,7 @@ class Mainbody(QtWidgets.QWidget):
             self.Coordinate_WidgetInstance.receive_image_from_camera
         )
 
-        """
-        === END of GUI ===
-        """
+        # === END of GUI ===
 
         self.Init_Meta_Text()
 
@@ -377,10 +403,10 @@ class Mainbody(QtWidgets.QWidget):
         self.Waveformer_WidgetInstance.Daq_sample_rate_pmt = (
             Daq_sample_rate_pmt
         )
-        self.Waveformer_WidgetInstance.handle_viewbox_coordinate_position_array_expanded_x = (
+        self.Waveformer_WidgetInstance.handle_viewbox_coordinate_position_array_expanded_x = (  # noqa
             handle_viewbox_coordinate_x
         )
-        self.Waveformer_WidgetInstance.handle_viewbox_coordinate_position_array_expanded_y = (
+        self.Waveformer_WidgetInstance.handle_viewbox_coordinate_position_array_expanded_y = (  # noqa
             handle_viewbox_coordinate_y
         )
 
@@ -474,14 +500,10 @@ class Mainbody(QtWidgets.QWidget):
         self.console_text_edit.ensureCursorVisible()
 
     def Init_Meta_Text(self):
-        Init_Meta_Text = "=========Meta Text======== \n\nConstruct: \n\nPipette pulling program: \nHeat: \nVelocity: \nDelay: \nPressure: \nRamp: \n\nTwo-photon wavelength: \nTwo-photon power: \nTwo-photon ND value: \nPMT amplification: \n\
-=======================\n"
-
         self.console_text_edit.clear()
-        self.console_text_edit.setPlainText(Init_Meta_Text)
+        self.console_text_edit.setPlainText(INIT_META_TEXT)
 
     def Save_Meta_Text(self):
-
         meta_text = self.console_text_edit.toPlainText()
         with open(
             os.path.join(self.savedirectory, "meta_text.txt"), "w"
