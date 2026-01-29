@@ -30,8 +30,6 @@ class AOTFLaserUI(QWidget):
         self,
         wavelength,
         colors,
-        signal,
-        lasers_status,
         *args,
         **kwargs,
     ):
@@ -41,8 +39,6 @@ class AOTFLaserUI(QWidget):
         self.channel = f"{wavelength}AO"
         self.blanking_channel = f"{wavelength}blanking"
         self.servo_channel = f"{wavelength} servo"
-        self.signal = signal
-        self.lasers_status = lasers_status
 
         with Icons.Path("shutter.png") as path:
             self.shutterButton = StylishQT.checkableButton(
@@ -89,10 +85,7 @@ class AOTFLaserUI(QWidget):
 
     def setChannelValue(self, value):
         daq = DAQmission()
-        self.lasers_status[self.wavelength][1] = value
-
         daq.sendSingleAnalog(self.channel, value / 100)
-        self.signal.emit(self.lasers_status)
 
     def reset_sliders(self):
         self.disconnect_signals()
@@ -101,10 +94,7 @@ class AOTFLaserUI(QWidget):
 
     def setChannelSwitch(self, value):
         daq = DAQmission()
-        self.lasers_status[self.wavelength][0] = value
-
         daq.sendSingleDigital(self.blanking_channel, value)
-        self.sig_lasers_status_changed.emit(self.lasers_status)
 
     def shutter_CW_action(self):
         daq = DAQmission()
@@ -112,8 +102,6 @@ class AOTFLaserUI(QWidget):
 
 
 class AOTFWidgetUI(QWidget):
-    sig_lasers_status_changed = pyqtSignal(dict)
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.setFont(QFont("Arial"))
@@ -153,32 +141,13 @@ class AOTFWidgetUI(QWidget):
             self.switchbutton_blankingAll, 0, 0, 1, 2
         )
 
-        self.lasers_status = {
-            wavelength: [False, 0] for wavelength in ("488", "532", "640")
-        }
-
-        self.laser640 = AOTFLaserUI(
-            640,
-            ("red", "indian red", "#DEC8C4"),
-            self.sig_lasers_status_changed,
-            self.lasers_status,
-        )
+        self.laser640 = AOTFLaserUI( 640, ("red", "indian red", "#DEC8C4"))
         self.AOTFcontrolLayout.addWidget(self.laser640, 1, 0)
 
-        self.laser532 = AOTFLaserUI(
-            532,
-            ("green", "lime green", "#CDDEC4"),
-            self.sig_lasers_status_changed,
-            self.lasers_status,
-        )
+        self.laser532 = AOTFLaserUI( 532, ("green", "lime green", "#CDDEC4"))
         self.AOTFcontrolLayout.addWidget(self.laser532, 2, 0)
 
-        self.laser488 = AOTFLaserUI(
-            488,
-            ("blue", "corn flower blue", "#C4DDDE"),
-            self.sig_lasers_status_changed,
-            self.lasers_status,
-        )
+        self.laser488 = AOTFLaserUI( 488, ("blue", "corn flower blue", "#C4DDDE"))
         self.AOTFcontrolLayout.addWidget(self.laser488, 3, 0)
 
         self.laserwidgets = self.laser640, self.laser532, self.laser488
