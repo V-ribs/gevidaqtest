@@ -31,26 +31,9 @@ import sys
 
 import pyqtgraph as pg
 import pyqtgraph.console
-from PyQt5 import QtWidgets
-from PyQt5.QtCore import QSize, pyqtSignal
-from PyQt5.QtGui import QFont, QIcon, QTextCursor
+from PyQt5 import QtGui, QtWidgets, QtCore
 
-from . import (
-    NIDAQ,
-    CoordinatesManager,
-    GalvoWidget,
-    HamamatsuCam,
-    Icons,
-    ImageAnalysis,
-    InsightX3,
-    PatchClamp,
-    PI_ObjectiveMotor,
-    SampleStageControl,
-    ScreeningWidget,
-    StylishQT,
-    ThorlabsFilterSlider,
-    ThorlabsKCube,
-)
+from . import Icons
 
 INIT_META_TEXT = """=========Meta Text======== 
 
@@ -71,16 +54,57 @@ PMT amplification:
 """  # noqa
 
 
+def imports():
+    """modules do way too much initialisation!
+
+    we do these at the last minute, after the splash screen shows
+    """
+    global NIDAQ, CoordinatesManager, GalvoWidget, HamamatsuCam, ImageAnalysis
+    global InsightX3, PatchClamp, PI_ObjectiveMotor, SampleStageControl
+    global ScreeningWidget, StylishQT, ThorlabsFilterSlider, ThorlabsKCube
+
+    from . import (
+        NIDAQ,
+        CoordinatesManager,
+        GalvoWidget,
+        HamamatsuCam,
+        ImageAnalysis,
+        InsightX3,
+        PatchClamp,
+        PI_ObjectiveMotor,
+        SampleStageControl,
+        ScreeningWidget,
+        StylishQT,
+        ThorlabsFilterSlider,
+        ThorlabsKCube,
+    )
+
+
 class Mainbody(QtWidgets.QWidget):
-    savedirectory_changed = pyqtSignal(str)
+    savedirectory_changed = QtCore.pyqtSignal(str)
+    shutdownSignal = QtCore.pyqtSignal()
+    startupComplete = QtCore.pyqtSignal()
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        with Icons.Path("splash.png") as path:
+            splashPic = QtGui.QPixmap(path)
 
+        self.splashScreen = QtWidgets.QSplashScreen(splashPic)
+        self.splashScreen.show()
+        self.splashScreen.raise_()
+        self.splashScreen.activateWindow()
+        self.startupComplete.connect(self.closeSplash)
+        self.splashScreen.showMessage("starting")
+
+    def closeSplash(self):
+        self.splashScreen.finish(self)
+
+    def initUI(self):
         with Icons.Path("Logo.png") as path:
-            self.setWindowIcon(QIcon(path))
+            self.setWindowIcon(QtGui.QIcon(path))
 
-        self.setFont(QFont("Arial"))
+        self.setFont(QtGui.QFont("Arial"))
 
         # === GUI ===
         self.setMinimumSize(800, 600)
@@ -144,7 +168,7 @@ class Mainbody(QtWidgets.QWidget):
 
         self.toolButtonOpenDialog = QtWidgets.QPushButton()
         with Icons.Path("Browse.png") as path:
-            self.toolButtonOpenDialog.setIcon(QIcon(path))
+            self.toolButtonOpenDialog.setIcon(QtGui.QIcon(path))
         self.toolButtonOpenDialog.setObjectName("toolButtonOpenDialog")
         self.toolButtonOpenDialog.clicked.connect(self.set_saving_directory)
 
@@ -163,7 +187,7 @@ class Mainbody(QtWidgets.QWidget):
 
         self.setMetaTextButton = QtWidgets.QPushButton()
         with Icons.Path("write.png") as path:
-            self.setMetaTextButton.setIcon(QIcon(path))
+            self.setMetaTextButton.setIcon(QtGui.QIcon(path))
         self.setMetaTextButton.setObjectName("Init. Meta Text")
         self.setdirectorycontrolLayout.addWidget(
             self.setMetaTextButton, 1, 3, 1, 1
@@ -172,7 +196,7 @@ class Mainbody(QtWidgets.QWidget):
 
         self.saveMetaTextButton = QtWidgets.QPushButton()
         with Icons.Path("save.png") as path:
-            self.saveMetaTextButton.setIcon(QIcon(path))
+            self.saveMetaTextButton.setIcon(QtGui.QIcon(path))
         self.saveMetaTextButton.setObjectName("Save Meta Text")
         self.setdirectorycontrolLayout.addWidget(
             self.saveMetaTextButton, 2, 3, 1, 1
@@ -254,9 +278,9 @@ class Mainbody(QtWidgets.QWidget):
             50, 50, color1=(255, 153, 255), color2=(204, 208, 255)
         )
 
-        self.open_cam.setIcon(QIcon("./Icons/Hamamatsu.png"))
+        self.open_cam.setIcon(QtGui.QIcon("./Icons/Hamamatsu.png"))
         self.open_cam.setToolTip("Open camera widget")
-        self.open_cam.setIconSize(QSize(60, 60))
+        self.open_cam.setIconSize(QtCore.QSize(60, 60))
         self.open_cam.clicked.connect(self.open_camera)
         self.layout.addWidget(self.open_cam, 4, 0, 1, 1)
         self.open_cam.setGraphicsEffect(
@@ -271,9 +295,9 @@ class Mainbody(QtWidgets.QWidget):
             40, 50, color1=(176, 224, 230), color2=(135, 206, 250)
         )
         with Icons.Path("two_photon.png") as path:
-            self.open_Insight.setIcon(QIcon(path))
+            self.open_Insight.setIcon(QtGui.QIcon(path))
         self.open_Insight.setToolTip("Open 2-p laser widget")
-        self.open_Insight.setIconSize(QSize(45, 45))
+        self.open_Insight.setIconSize(QtCore.QSize(45, 45))
         self.open_Insight.setFixedWidth(65)
         self.open_Insight.clicked.connect(self.open_Insight_UI)
         self.layout.addWidget(self.open_Insight, 3, 1, 2, 1)
@@ -287,9 +311,9 @@ class Mainbody(QtWidgets.QWidget):
             40, 50, color1=(245, 245, 220), color2=(255, 228, 196)
         )
         with Icons.Path("Screening1.png") as path:
-            self.open_screening_button.setIcon(QIcon(path))
+            self.open_screening_button.setIcon(QtGui.QIcon(path))
         self.open_screening_button.setToolTip("Open screening widget")
-        self.open_screening_button.setIconSize(QSize(45, 45))
+        self.open_screening_button.setIconSize(QtCore.QSize(45, 45))
         self.open_screening_button.setFixedWidth(65)
         self.open_screening_button.clicked.connect(self.open_screening)
         self.layout.addWidget(self.open_screening_button, 3, 0, 2, 1)
@@ -303,10 +327,10 @@ class Mainbody(QtWidgets.QWidget):
             40, 50, color1=(255, 153, 255), color2=(204, 208, 255)
         )
         with Icons.Path("patchclamp.png") as path:
-            self.open_sealtest_button.setIcon(QIcon(path))
+            self.open_sealtest_button.setIcon(QtGui.QIcon(path))
         # self.open_sealtest_button.setText("Seal test")
         self.open_sealtest_button.setToolTip("Open sealtest widget")
-        self.open_sealtest_button.setIconSize(QSize(45, 45))
+        self.open_sealtest_button.setIconSize(QtCore.QSize(45, 45))
         self.open_sealtest_button.setFixedWidth(65)
         self.open_sealtest_button.clicked.connect(self.open_sealtest)
         self.layout.addWidget(self.open_sealtest_button, 3, 2, 2, 1)
@@ -321,10 +345,10 @@ class Mainbody(QtWidgets.QWidget):
             40, 50, color1=(50, 50, 255), color2=(100, 100, 255)
         )
         with Icons.Path("patchclamp.png") as path:
-            self.open_AutoPatcher_button.setIcon(QIcon(path))
+            self.open_AutoPatcher_button.setIcon(QtGui.QIcon(path))
         # self.open_sealtest_button.setText("Seal test")
         self.open_AutoPatcher_button.setToolTip("Open AutoPatcher")
-        self.open_AutoPatcher_button.setIconSize(QSize(45, 45))
+        self.open_AutoPatcher_button.setIconSize(QtCore.QSize(45, 45))
         self.open_AutoPatcher_button.setFixedWidth(65)
         self.open_AutoPatcher_button.clicked.connect(self.open_AutoPatcher)
         self.layout.addWidget(self.open_AutoPatcher_button, 3, 3, 2, 1)
@@ -371,9 +395,13 @@ class Mainbody(QtWidgets.QWidget):
             self.Coordinate_WidgetInstance.receive_image_from_camera
         )
 
-        # === END of GUI ===
-
-        self.Init_Meta_Text()
+    def showEvent(self, event):
+        self.splashScreen.showMessage("importing modules")
+        imports()
+        self.splashScreen.showMessage("initialising interface")
+        self.initUI()
+        self.splashScreen.showMessage("initialising instruments")
+        self.startupActions()
 
     # %%
     def __del__(self):
@@ -494,7 +522,7 @@ class Mainbody(QtWidgets.QWidget):
         """Append text to the QTextEdit."""
         # Maybe QTextEdit.append() works as well, but this is how I do it:
         cursor = self.console_text_edit.textCursor()
-        cursor.movePosition(QTextCursor.End)
+        cursor.movePosition(QtGui.QTextCursor.End)
         cursor.insertText(text)
         self.console_text_edit.setTextCursor(cursor)
         self.console_text_edit.ensureCursorVisible()
@@ -511,16 +539,67 @@ class Mainbody(QtWidgets.QWidget):
             output_file.write(meta_text)
 
     def closeEvent(self, event):
-        QtWidgets.QApplication.quit()
-        event.accept()
+        self.shutdownDialog = ShutdownBlock(parent=self)
+        self.shutdownDialog.show()
+        self.shutdownDialog.raise_()
+        self.shutdownDialog.activateWindow()
+
+        # create separate thread for shutdown tasks
+        QtCore.QTimer.singleShot(1, self.shutdownActions)
+
+        # ignore the event, the shutdown tasks will close the application
+        event.ignore()
+
+    def startupActions(self):
+        """actions to do on startup"""
+        try:
+            self.Init_Meta_Text()
+            for widget in self.AOTFWidgetInstance.laserwidgets:
+                widget.shutter_CW_action()
+        finally:
+            self.startupComplete.emit()
+
+    def shutdownActions(self):
+        """actions to do on shutdown"""
+        try:
+            for widget in self.AOTFWidgetInstance.laserwidgets:
+                widget.shutterButton.setChecked(False)
+                widget.shutter_CW_action()
+        finally:
+            self.shutdownSignal.emit()
+
+
+class ShutdownBlock(QtWidgets.QDialog):
+    """a modal dialog that inhibits all user interaction
+
+    to be used while the application is shutting down
+    """
+
+    def __init__(self, parent):
+        super().__init__(parent=parent)
+        self.setWindowTitle("Shutting down")
+        text = "Please wait while the application is performing shutdown tasks"
+        self.text = QtWidgets.QLabel(text=text)
+        self.layout = QtWidgets.QHBoxLayout()
+        self.layout.addWidget(self.text)
+        self.setLayout(self.layout)
+        self.setModal(True)
+
+    def closeEvent(self, event):
+        event.ignore()
 
 
 def run_app():
     app = QtWidgets.QApplication(sys.argv)
+
     QtWidgets.QApplication.setStyle(QtWidgets.QStyleFactory.create("Fusion"))
     pg.setConfigOptions(imageAxisOrder="row-major")
+
     mainwin = Mainbody()
-    mainwin.show()
+    mainwin.shutdownSignal.connect(app.quit)
+
+    # put mainwindow show on a tiny timer to allow the splash screen to show
+    QtCore.QTimer.singleShot(1, mainwin.show)
     app.exec_()
 
 
