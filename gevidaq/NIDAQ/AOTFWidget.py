@@ -10,7 +10,7 @@ import threading
 
 import pyqtgraph as pg
 from PyQt5 import QtWidgets
-from PyQt5.QtCore import Qt, pyqtSignal
+from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QColor, QFont, QPalette
 from PyQt5.QtWidgets import (
     QDoubleSpinBox,
@@ -141,13 +141,15 @@ class AOTFWidgetUI(QWidget):
             self.switchbutton_blankingAll, 0, 0, 1, 2
         )
 
-        self.laser640 = AOTFLaserUI( 640, ("red", "indian red", "#DEC8C4"))
+        self.laser640 = AOTFLaserUI(640, ("red", "indian red", "#DEC8C4"))
         self.AOTFcontrolLayout.addWidget(self.laser640, 1, 0)
 
-        self.laser532 = AOTFLaserUI( 532, ("green", "lime green", "#CDDEC4"))
+        self.laser532 = AOTFLaserUI(532, ("green", "lime green", "#CDDEC4"))
         self.AOTFcontrolLayout.addWidget(self.laser532, 2, 0)
 
-        self.laser488 = AOTFLaserUI( 488, ("blue", "corn flower blue", "#C4DDDE"))
+        self.laser488 = AOTFLaserUI(
+            488, ("blue", "corn flower blue", "#C4DDDE")
+        )
         self.AOTFcontrolLayout.addWidget(self.laser488, 3, 0)
 
         self.laserwidgets = self.laser640, self.laser532, self.laser488

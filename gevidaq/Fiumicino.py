@@ -31,7 +31,7 @@ import sys
 
 import pyqtgraph as pg
 import pyqtgraph.console
-from PyQt5 import QtGui, QtWidgets, QtCore
+from PyQt5 import QtCore, QtGui, QtWidgets
 
 from . import Icons
 
