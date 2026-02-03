@@ -563,8 +563,9 @@ class Mainbody(QtWidgets.QWidget):
         """actions to do on shutdown"""
         try:
             for widget in self.AOTFWidgetInstance.laserwidgets:
-                widget.shutterButton.setChecked(False)
-                widget.shutter_CW_action()
+                if widget.shutterButton.isChecked():
+                    widget.shutterButton.setChecked(False)
+                    widget.shutter_CW_action()
         finally:
             self.shutdownSignal.emit()
 

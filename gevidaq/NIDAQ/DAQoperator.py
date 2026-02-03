@@ -91,8 +91,10 @@ class DAQmission(QThread):
             writingtask.write(writing_value)
 
     def sendServoSignal(self, servo_channel: str, open_servo: bool):
-        """
-        Opens (open_servo=True), or closes (open_servo=False) the beam path servo_channel.
+        """Opens or closes the beam path servo_channel.
+
+        servo_channel: the name of the channel as found in the channel_LUT
+        open_servo: True means to open the servo, False means close
         """
         sample_rate = 50000
         total_duration = 0.25
@@ -100,11 +102,11 @@ class DAQmission(QThread):
 
         # set signal parameters
         if open_servo:
-            high_time = 0.002
-            low_time = 0.018
-        if not open_servo:
             high_time = 0.001
             low_time = 0.019
+        else:
+            high_time = 0.002
+            low_time = 0.018
 
         num_cycles = int(total_duration * frequency)
 
@@ -119,11 +121,11 @@ class DAQmission(QThread):
         with nidaqmx.Task() as writingtask:
             writingtask.do_channels.add_do_chan(
                 channelname,
-                line_grouping=nidaqmx.constants.LineGrouping.CHAN_FOR_ALL_LINES,
+                line_grouping=LineGrouping.CHAN_FOR_ALL_LINES,
             )
             writingtask.timing.cfg_samp_clk_timing(
                 sample_rate,
-                sample_mode=nidaqmx.constants.AcquisitionType.FINITE,
+                sample_mode=AcquisitionType.FINITE,
                 samps_per_chan=len(signal),
             )
             writingtask.write(signal, auto_start=False)
