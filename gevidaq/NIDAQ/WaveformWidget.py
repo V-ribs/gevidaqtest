@@ -84,11 +84,11 @@ class WaveformGenerator(QWidget):
 
         # To solve camera losing first trigger issue, add one extra trigger
         # in the beginning.
-        self.Adding_extra_camera_trigger_flag = True
+        self.Adding_extra_camera_trigger_flag = False
         # In append mode, new added waveforms append behind
         self.Append_Mode = False
         # Reset channels by adding 0 at the start/end, includes extra trigger.
-        self.Auto_padding_flag = True
+        self.Auto_padding_flag = False
 
         # These contour scanning signals will be set from main panel.
         self.handle_viewbox_coordinate_position_array_expanded = None
@@ -760,38 +760,32 @@ class WaveformGenerator(QWidget):
         self.button_del_digital.clicked.connect(self.del_waveform_digital)
 
         self.switchAutoPadding = StylishQT.MySwitch(
-            "Auto padding Off",
-            "indian red",
             "Auto padding",
             "spring green",
+            "Auto padding Off",
+            "indian red",
             width=92,
         )
-        self.switchAutoPadding.clicked.connect(lambda: self.setAutoPadding())
+        self.switchAutoPadding.clicked.connect(self.setAutoPadding)
         self.switchAutoPadding.setToolTip(
             "Add one extra camera trigger at the start or not--"
             "Camera losing first frame"
         )
 
-        self.switchAutoPadding.setChecked(False)
-
         self.DigitalLayout.addWidget(self.switchAutoPadding, 0, 3)
 
         self.switchExtraTrigger = StylishQT.MySwitch(
             "Extra camTrigger",
-            "indian red",
-            "Extra camTrigger",
             "spring green",
+            "E-cT Off",
+            "indian red",
             width=92,
         )
-        self.switchExtraTrigger.clicked.connect(
-            lambda: self.setExtraTriggerFlag()
-        )
+        self.switchExtraTrigger.clicked.connect(self.setExtraTriggerFlag)
         self.switchExtraTrigger.setToolTip(
             "Add one extra camera trigger at the start or not--"
             "Camera losing first frame"
         )
-
-        self.switchExtraTrigger.setChecked(True)
 
         self.DigitalLayout.addWidget(self.switchExtraTrigger, 0, 4)
 
@@ -1168,22 +1162,22 @@ class WaveformGenerator(QWidget):
     def setExtraTriggerFlag(self):
         # Add extra 4 samples of one camera trigger or not
         if self.switchExtraTrigger.isChecked():
-            self.Adding_extra_camera_trigger_flag = False
-            logging.info("Don't add one extra camera trigger.")
-        else:
             self.Adding_extra_camera_trigger_flag = True
             logging.info("Add one extra camera trigger.")
+        else:
+            self.Adding_extra_camera_trigger_flag = False
+            logging.info("Don't add one extra camera trigger.")
 
     def setAutoPadding(self):
         # Add 0 at the start and the end of waveforms to reset channels.
         # For patchAO not necessarily 0.
         # Over command extra camera trigger.
         if self.switchAutoPadding.isChecked():
-            self.Auto_padding_flag = False
-            logging.info("Don't pad 0 to reset channels.")
-        else:
             self.Auto_padding_flag = True
             logging.info("Pad 0 to reset channels.")
+        else:
+            self.Auto_padding_flag = False
+            logging.info("Don't pad 0 to reset channels.")
 
     # %%
     def generate_contour_for_waveform(self):
