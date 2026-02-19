@@ -1111,8 +1111,8 @@ class AnalysisWidgetUI(QWidget):
             else:
                 plt.figure()
                 plt.plot(self.single_waveform_fileName)
-                plt.show()
 
+            plt.show()
         except Exception as exc:
             logging.critical("caught exception", exc_info=exc)
 
