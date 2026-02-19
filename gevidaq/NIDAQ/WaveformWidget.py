@@ -2179,6 +2179,7 @@ class WaveformGenerator(QWidget):
             filename = waveform_specification.create_filename(
                 self.saving_prefix, self.SamplingRateTextbox.value()
             )
+            ciao = np.array(ciao, dtype=object)
             np.save(
                 os.path.join(self.savedirectory, filename),
                 ciao,
