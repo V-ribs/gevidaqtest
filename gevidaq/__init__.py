@@ -7,4 +7,6 @@ Created on Mon Apr 20 18:50:32 2020
 
 
 def main():
-    from . import __main__  # noqa
+    from . import __main__
+
+    __main__.run()
