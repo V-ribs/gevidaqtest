@@ -449,8 +449,9 @@ class HamamatsuCamera(object):
 
     def getCameraProperties(self):
         """
-        Return the ids & names of all the properties that the camera supports. This
-        is used at initialization to populate the self.properties attribute.
+        Return the ids & names of all the properties that the camera supports.
+        This is used at initialization to populate the self.properties
+        attribute.
         """
         c_buf_len = 64
         c_buf = ctypes.create_string_buffer(
@@ -469,7 +470,8 @@ class HamamatsuCamera(object):
             self.checkStatus(ret, "dcamprop_getnextid")
 
         # Get the first property.
-        # Use dcamprop_getnextid to get the id first and then use dcamprop_getname to get the name.
+        # Use dcamprop_getnextid to get the id first and then use
+        # dcamprop_getname to get the name.
         ret = dcam.dcamprop_getnextid(
             self.camera_handle,
             ctypes.byref(prop_id),
@@ -477,6 +479,7 @@ class HamamatsuCamera(object):
         )
         if (ret != 0) and (ret != DCAMERR_NOERROR):
             self.checkStatus(ret, "dcamprop_getnextid")
+
         self.checkStatus(
             dcam.dcamprop_getname(
                 self.camera_handle, prop_id, c_buf, ctypes.c_int32(c_buf_len)
@@ -492,10 +495,13 @@ class HamamatsuCamera(object):
                 convertPropertyName(c_buf.value.decode(self.encoding))
             ] = prop_id.value
 
-            # dcamprop_getnextid: If the host software calls this function with the iProp value set to 0
-            # , the function will return the next property ID in the iProp value.
-            # -- ctypes.byref(prop_id): the pointer to a property ID which will also receive the next property ID
-            # -- ctypes.c_int32(DCAMPROP_OPTION_NEXT): Option for getting next property id.
+            # dcamprop_getnextid: If the host software calls this function with
+            # the iProp value set to 0, the function will return the next
+            # property ID in the iProp value.
+            # -- ctypes.byref(prop_id): the pointer to a property ID which will
+            #                           also receive the next property ID
+            # -- ctypes.c_int32(DCAMPROP_OPTION_NEXT): Option for getting next
+            #                                          property id.
             ret = dcam.dcamprop_getnextid(
                 self.camera_handle,
                 ctypes.byref(prop_id),
@@ -504,10 +510,12 @@ class HamamatsuCamera(object):
             if (ret != 0) and (ret != DCAMERR_NOERROR):
                 self.checkStatus(ret, "dcamprop_getnextid")
 
-            # The dcamprop_getname() function returns the character string as the name of the property
-            # specified by the iProp argument.
-            # -- c_buf: the pointer of a buffer to receive the property name; prop_id: the property ID;
-            # -- ctypes.c_int32(c_buf_len): the size of the buffer that will receive the property name
+            # The dcamprop_getname() function returns the character string as
+            # the name of the property specified by the iProp argument.
+            # -- c_buf: the pointer of a buffer to receive the property name;
+            #           prop_id: the property ID;
+            # -- ctypes.c_int32(c_buf_len): the size of the buffer that will
+            #                               receive the property name
             self.checkStatus(
                 dcam.dcamprop_getname(
                     self.camera_handle,
@@ -694,7 +702,8 @@ class HamamatsuCamera(object):
         # Check if the property exists.
         if not (property_name in self.properties):
             logging.info(f"unknown property name: {property_name}")
-            return False
+            return False, "NONE"
+
         prop_id = self.properties[property_name]
 
         # Get the property attributes.
@@ -726,7 +735,7 @@ class HamamatsuCamera(object):
             prop_type = "NONE"
             prop_value = False
 
-        return [prop_value, prop_type]
+        return prop_value, prop_type
 
     def newFrames(self):
         """
@@ -1016,11 +1025,9 @@ class HamamatsuCameraMR(HamamatsuCamera):
                be zero. Are frames getting dropped? Some sort of race condition?
         """
         frames = []
-        for (
-            n
-        ) in (
-            self.newFrames()
-        ):  # self.newFrames typically looks like a list with integers like [0] and [1] in next frame.
+        # self.newFrames typically looks like a list with integers like [0] and
+        # [1] in next frame.
+        for n in self.newFrames():
             frames.append(self.hcam_data[n])
 
         return [frames, [self.frame_x, self.frame_y]]

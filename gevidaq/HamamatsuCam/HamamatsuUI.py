@@ -286,8 +286,7 @@ class CameraUI(QMainWindow):
         self.CamExposureBox.setSingleStep(0.001)
 
         CamExposureButton = QPushButton("Set exposure")
-        CamExposureButton.clicked.connect(self.SetExposureTimeFromCamera)
-        self.allowUserInputForExposure = True
+        CamExposureButton.clicked.connect(self.set_exposure_clicked)
 
         CameraSettingTab_1.layout.addWidget(
             QLabel("Exposure time:"), 4, 0, 1, 1
@@ -776,9 +775,6 @@ class CameraUI(QMainWindow):
             self.CameraImageInspectionLayout
         )
 
-        # Store the connection for later disconnection
-        self.mouse_click_connection = None
-
         """
         # Camera acquisition container.
         """
@@ -1172,6 +1168,9 @@ class CameraUI(QMainWindow):
         self.Live_view = self.LiveWidget.getView()
         self.Live_item.setAutoDownsample(True)
 
+        self.mouse_click_connection = False
+        self.Live_item.scene().sigMouseClicked.connect(self.handleMouseClick)
+
         self.LiveWidget.ui.roiBtn.hide()
         self.LiveWidget.ui.menuBtn.hide()
         self.LiveWidget.ui.normGroup.hide()
@@ -1459,38 +1458,39 @@ class CameraUI(QMainWindow):
             self.hcam.setPropertyValue("subarray_mode", "ON")
         else:
             self.setRoiParameters("OFF", 2048, 2048, 0, 0)
-            self.allowUserInputForExposure = False
-            self.SetExposureTimeFromCamera()
+            self.read_exposure_time()
 
-    def SetExposureTimeFromCamera(self):
+    def set_exposure_clicked(self):
+        """the set exposure button was clicked"""
         # Ensure the live update interval is not too short
         readout_time = self.hcam.getPropertyValue("timing_readout_time")[0]
 
-        if self.allowUserInputForExposure:
-            ui_exposure_time = self.CamExposureBox.value()
+        ui_exposure_time = self.CamExposureBox.value()
 
-            if ui_exposure_time < readout_time:
-                logging.warning(
-                    "Trying to set an exposure time that's less than the"
-                    "readout time. Setting exposure time to readout time."
-                )
-                ui_exposure_time = readout_time
-
-            self.CamExposureBox.setValue(ui_exposure_time)
-            self.hcam.setPropertyValue("exposure_time", ui_exposure_time)
-            self.live_update_interval = (
-                self.minimum_live_update_interval
-                if ui_exposure_time < self.minimum_live_update_interval
-                else ui_exposure_time
+        if ui_exposure_time < readout_time:
+            logging.warning(
+                "Trying to set an exposure time that's less than the"
+                "readout time. Setting exposure time to readout time."
             )
+            ui_exposure_time = readout_time
+
+        self.CamExposureBox.setValue(ui_exposure_time)
+        self.hcam.setPropertyValue("exposure_time", ui_exposure_time)
+        if ui_exposure_time < self.minimum_live_update_interval:
+            self.live_update_interval = self.minimum_live_update_interval
         else:
-            self.hcam.setPropertyValue("exposure_time", readout_time)
-            self.live_update_interval = (
-                self.minimum_live_update_interval
-                if readout_time < self.minimum_live_update_interval
-                else readout_time
-            )
-            self.allowUserInputForExposure = True
+            self.live_update_interval = ui_exposure_time
+
+        self.UpdateHamamatsuSpecsLabels()
+
+    def read_exposure_time(self):
+        """read the current exposure time from the camera"""
+        readout_time = self.hcam.getPropertyValue("timing_readout_time")[0]
+        self.hcam.setPropertyValue("exposure_time", readout_time)
+        if readout_time < self.minimum_live_update_interval:
+            self.live_update_interval = self.minimum_live_update_interval
+        else:
+            self.live_update_interval = readout_time
 
         self.UpdateHamamatsuSpecsLabels()
 
@@ -1826,8 +1826,7 @@ class CameraUI(QMainWindow):
             self.setRoiParameters("OFF", 2048, 2048, 0, 0)
             self.SubArrayModeSwitchButton.setChecked(False)
 
-            self.allowUserInputForExposure = False
-            self.SetExposureTimeFromCamera()
+            self.read_exposure_time()
         else:
             self.setRoiParameters(
                 "OFF",
@@ -1839,8 +1838,7 @@ class CameraUI(QMainWindow):
             self.hcam.setPropertyValue("subarray_mode", "ON")
             self.SubArrayModeSwitchButton.setChecked(True)
 
-            self.allowUserInputForExposure = False
-            self.SetExposureTimeFromCamera()
+            self.read_exposure_time()
 
         self.UpdateHamamatsuSpecsLabels()
         self.ShowROISelectorButton.setChecked(False)
@@ -2080,6 +2078,8 @@ class CameraUI(QMainWindow):
         self.Live_item = self.LiveWidget.getImageItem()  # setLevels
         self.Live_view = self.LiveWidget.getView()
         self.Live_item.setAutoDownsample(True)
+        self.mouse_click_connection = False
+        self.Live_item.scene().sigMouseClicked.connect(self.handleMouseClick)
 
         self.LiveWidget.ui.roiBtn.hide()
         self.LiveWidget.ui.menuBtn.hide()
@@ -2415,19 +2415,8 @@ class CameraUI(QMainWindow):
             # Reset any other states (like the stored live image)
             self.Live_image = None
 
-            # Disconnect the mouse click event handler to prevent updates
-            # after clearing the image
-            if self.mouse_click_connection is not None:
-                try:
-                    self.Live_item.scene().sigMouseClicked.disconnect(
-                        self.mouse_click_connection
-                    )
-                except Exception as exc:
-                    logging.info(
-                        "Error disconnecting mouse click event:", exc_info=exc
-                    )
-
-                self.mouse_click_connection = None
+            # turn off the mouse click event handler to prevent updates
+            self.mouse_click_connection = False
 
             logging.info("Image cleared successfully.")
             self.clearImageButton.setEnabled(False)
@@ -2443,25 +2432,13 @@ class CameraUI(QMainWindow):
             logging.info("No image loaded for interaction.")
             return
 
-        # Disconnect the previous connection if it exists
-        if self.mouse_click_connection is not None:
-            try:
-                self.Live_item.scene().sigMouseClicked.disconnect(
-                    self.mouse_click_connection
-                )
-            except Exception as exc:
-                logging.info(
-                    "Error disconnecting mouse click event:", exc_info=exc
-                )
-
-        # Connect the mouse click event to the handler
-        self.mouse_click_connection = (
-            self.Live_item.scene().sigMouseClicked.connect(
-                self.handleMouseClick
-            )
-        )
+        # enable the mouse click event handler
+        self.mouse_click_connection = True
 
     def handleMouseClick(self, event):
+        if not self.mouse_click_connection:
+            return
+
         if self.Live_image is None:
             logging.info("No image loaded for interaction.")
             return
@@ -3024,9 +3001,13 @@ class StreamingWorker(QObject):
                         )
                         start_time = time.time()
                         break
+
                     time.sleep(0.01)  # Sleep briefly to avoid busy-waiting
 
-                while time.time() - start_time < self.stream_duration:
+                while (
+                    self.camera_is_streaming
+                    and time.time() - start_time < self.stream_duration
+                ):
                     frames, dims = self.hcam.getFrames()
                     self.dims = dims
                     for aframe in frames:
@@ -3039,6 +3020,9 @@ class StreamingWorker(QObject):
 
             elif self.stop_signal == "Frames":
                 for _ in range(self.buffer_number):
+                    if not self.camera_is_streaming:
+                        break
+
                     frames, dims = self.hcam.getFrames()
                     self.dims = dims
                     for aframe in frames:
