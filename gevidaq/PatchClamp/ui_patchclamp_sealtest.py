@@ -8,6 +8,7 @@ Part of this code was derived from:
     https://github.com/sidneycadot/pyqt-and-graphing/blob/master/PyQtGraphing.py
 
 """
+
 import logging
 import math
 import os

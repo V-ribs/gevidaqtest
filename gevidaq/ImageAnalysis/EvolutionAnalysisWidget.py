@@ -46,7 +46,6 @@ from ..SampleStageControl.stage import LudlStage
 from .ImageProcessing import ProcessImage
 
 
-
 def run_in_thread(fn):
     """
     https://stackoverflow.com/questions/23944657/typeerror-method-takes-1-positional-argument-but-2-were-given
@@ -461,10 +460,6 @@ class MainGUI(QWidget):
         )
 
         self.normalOutputWritten("Start loading images...\n")
-
-        
-        
-       
 
     # %%
     def ReadEexcel(self):

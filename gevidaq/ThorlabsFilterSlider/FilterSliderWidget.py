@@ -5,7 +5,6 @@ Created on Wed Mar  4 13:54:35 2020
 @author: xinmeng
 """
 
-
 import logging
 import sys
 import threading

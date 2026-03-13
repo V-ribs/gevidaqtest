@@ -1082,8 +1082,7 @@ class CameraUI(QMainWindow):
         self.CamStreamSaving_progressbar = QProgressBar(self)
         self.CamStreamSaving_progressbar.setMaximumWidth(250)
         self.CamStreamSaving_progressbar.setMaximum(100)
-        self.CamStreamSaving_progressbar.setStyleSheet(
-            """
+        self.CamStreamSaving_progressbar.setStyleSheet("""
             QProgressBar {
                 color: black;
                 border: 1px solid grey;
@@ -1095,8 +1094,7 @@ class CameraUI(QMainWindow):
                 width: 5px;
                 margin: 1px;
             }
-            """
-        )
+            """)
         CamStreamSavingWidget.layout.addWidget(
             self.CamStreamSaving_progressbar, 0, 1, 1, 4
         )
@@ -1115,16 +1113,14 @@ class CameraUI(QMainWindow):
 
         CameraAcquisitionTab.addTab(CameraAcquisitionTab_1, "Live")
         CameraAcquisitionTab.addTab(CameraAcquisitionTab_2, "Stream")
-        CameraAcquisitionTab.setStyleSheet(
-            """
+        CameraAcquisitionTab.setStyleSheet("""
             QTabBar {
                 width: 200px;
                 font-size: 8pt;
                 font: bold;
                 color: #003366
             }
-            """
-        )
+            """)
         self.AcquisitionROIstackedWidget.addWidget(CameraAcquisitionTab)
 
         """
@@ -1748,9 +1744,7 @@ class CameraUI(QMainWindow):
                         >Estimated max fps: </span>
                     <span style="color: #FF0; font-size: 10pt;"
                         >{}</span></div>
-            """.format(
-                round(self.ROIEstimatedMaxFPS, 2)
-            ),
+            """.format(round(self.ROIEstimatedMaxFPS, 2)),
             anchor=(1, 1),
         )
         self.ROIitemText.setPos(self.ROI_hpos, self.ROI_vpos)

@@ -45,8 +45,7 @@ class ObjMotorWidgetUI(QWidget):
 
         # Movement based on relative positions.
         self.ObjMotorcontrolContainer = QGroupBox("Objective focus")
-        self.ObjMotorcontrolContainer.setStyleSheet(
-            "QGroupBox {\
+        self.ObjMotorcontrolContainer.setStyleSheet("QGroupBox {\
                                 font: bold;\
                                 border: 1px solid silver;\
                                 border-radius: 6px;\
@@ -55,8 +54,7 @@ class ObjMotorWidgetUI(QWidget):
                                 background-color: #FFFAFA}\
                                 QGroupBox::title{subcontrol-origin: margin;\
                                                  left: 7px;\
-                                                 padding: 5px 5px 5px 5px;}"
-        )
+                                                 padding: 5px 5px 5px 5px;}")
         self.ObjMotorcontrolLayout = QGridLayout()
 
         self.ObjMotor_connect = StylishQT.connectButton()

@@ -6,6 +6,7 @@ Created on Mon Apr 20 18:33:21 2020
 
                 For stylish looking
 """
+
 import pyqtgraph as pg
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import (
@@ -36,19 +37,15 @@ class roundQGroupBox(QtWidgets.QGroupBox):
         if title is not None:
             self.setTitle(title)
 
-        StyleSheet = (
-            "QGroupBox {\
+        StyleSheet = "QGroupBox {\
                         font: bold;\
                         border: 1px solid silver;\
                         border-radius: 6px;\
                         margin-top: 12px;\
                         color:Navy; \
-                        background-color: "
-            + self.background_color
-            + "}QGroupBox::title{subcontrol-origin: margin;\
+                        background-color: " + self.background_color + "}QGroupBox::title{subcontrol-origin: margin;\
                                          left: 7px;\
                                          padding: 5px 5px 5px 5px;}"
-        )
         self.setStyleSheet(StyleSheet)
 
 

@@ -13,6 +13,7 @@ Created on Tue Jul  7 10:44:31 2020
 
 Adding 'laser' to CoordinateWidget signal list.
 """
+
 import importlib.resources
 import logging
 import os

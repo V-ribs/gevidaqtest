@@ -4,6 +4,7 @@ Created on Wed Mar  4 12:04:41 2020
 
 @author: xinmeng
 """
+
 import sys
 import threading
 
@@ -36,8 +37,7 @@ class StageWidgetUI(QWidget):
 
         # === GUI for Stage ===
         stagecontrolContainer = QGroupBox("Stage control")
-        stagecontrolContainer.setStyleSheet(
-            "QGroupBox {\
+        stagecontrolContainer.setStyleSheet("QGroupBox {\
                                 font: bold;\
                                 border: 1px solid silver;\
                                 border-radius: 6px;\
@@ -46,8 +46,7 @@ class StageWidgetUI(QWidget):
                                 background-color: #F8F8FF;}\
                                 QGroupBox::title{subcontrol-origin: margin;\
                                                  left: 7px;\
-                                                 padding: 5px 5px 5px 5px;}"
-        )
+                                                 padding: 5px 5px 5px 5px;}")
         self.stagecontrolLayout = QGridLayout()
 
         self.stage_upwards = QPushButton()

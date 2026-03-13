@@ -7,6 +7,7 @@ Created on Mon Mar 18 12:21:01 2019
 Notes:
 
 """
+
 import nidaqmx
 import numpy as np
 from nidaqmx.stream_readers import AnalogMultiChannelReader

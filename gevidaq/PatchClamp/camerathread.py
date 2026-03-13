@@ -5,7 +5,6 @@ Created on Tue Aug 10 15:05:11 2021
 @author: TvdrBurgt
 """
 
-
 import logging
 import time
 from copy import copy

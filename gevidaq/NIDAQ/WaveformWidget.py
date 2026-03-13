@@ -326,8 +326,7 @@ class WaveformGenerator(QWidget):
         self.waveform_progressbar.setMaximumWidth(250)
         self.waveform_progressbar.setMinimumWidth(200)
         self.waveform_progressbar.setMaximum(100)
-        self.waveform_progressbar.setStyleSheet(
-            """
+        self.waveform_progressbar.setStyleSheet("""
             QProgressBar {
                 color: black;
                 border: 2px solid grey;
@@ -339,8 +338,7 @@ class WaveformGenerator(QWidget):
                 width: 10px;
                 margin: 0.5px;
             }
-            """
-        )
+            """)
         executionContainerLayout.addWidget(self.waveform_progressbar, 0, 3)
 
         self.button_all = StylishQT.generateButton()
