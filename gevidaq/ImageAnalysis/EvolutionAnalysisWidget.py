@@ -45,10 +45,6 @@ from ..CoordinatesManager import CoordinateTransformations
 from ..SampleStageControl.stage import LudlStage
 from .ImageProcessing import ProcessImage
 
-try:
-    from .ImageProcessing_MaskRCNN import ProcessImageML
-except ImportError:
-    logging.info("None-MaskRCNN environment.")
 
 
 def run_in_thread(fn):
@@ -466,14 +462,7 @@ class MainGUI(QWidget):
 
         self.normalOutputWritten("Start loading images...\n")
 
-        # For camera images analysis, load the weight file which is trained on spiking HEK cells
-        if len(self.Tag_round_infor) == 0 and len(self.Lib_round_infor) == 0:
-            self.ProcessML = ProcessImageML(
-                WeigthPath=r"M:\tnw\ist\do\projects\Neurophotonics\Brinkslab\Data\Martijn\SpikingHek.h5"  # TODO hardcoded path
-            )
-        else:
-            self.ProcessML = ProcessImageML()
-
+        
         # === General image analysis in folder. ===
         if len(self.Tag_round_infor) == 0 and len(self.Lib_round_infor) == 0:
             if self.FilepathSwitchBox.currentText() == "Cam Z-max":
