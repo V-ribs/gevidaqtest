@@ -464,6 +464,7 @@ class MainGUI(QWidget):
 
         
         # === General image analysis in folder. ===
+        '''
         if len(self.Tag_round_infor) == 0 and len(self.Lib_round_infor) == 0:
             if self.FilepathSwitchBox.currentText() == "Cam Z-max":
                 # For camera screening analysis, use Spiking HEK weight
@@ -503,7 +504,7 @@ class MainGUI(QWidget):
             else:
                 # For camera screening analysis, use Spiking HEK weight
                 self.ProcessML.config.WeigthPath = r"M:\tnw\ist\do\projects\Neurophotonics\Brinkslab\Data\Martijn\SpikingHek.h5"  # TODO hardcoded path
-
+'''
                 # Generate the max projection
                 ProcessImage.cam_screening_post_processing(
                     self.Analysis_saving_directory,
