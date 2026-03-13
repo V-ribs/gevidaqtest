@@ -137,6 +137,7 @@ class ScanningExecutionThread(QThread):
                 time.sleep(0.5)
         """
         # Initialize ML
+        This is redundant as we are moving away from MaskRCNN
         """
         self._use_ML = False
         # Check if machine learning segmentation is used.
