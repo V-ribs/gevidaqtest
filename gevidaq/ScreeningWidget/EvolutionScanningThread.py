@@ -357,23 +357,16 @@ class ScanningExecutionThread(QThread):
 
                             # Add the focus degree of previous image to the list.
                             # For stack of 3 only.
+                            # Add the focus degree of previous image to the list.
                             if EachZStackPos > 0:
-                                try:
-                                    self.stack_focus_degree_list.append(
-                                        self.FocusDegree_img_reconstructed
-                                    )
-
-                                except Exception as exc:
-                                    logging.critical(
-                                        "caught exception", exc_info=exc
-                                    )
-                                    # FocusDegree_img_reconstructed is not generated with camera imaging.
-                                    pass
-                            logging.info(
-                                "stack_focus_degree_list is {}".format(
-                                    self.stack_focus_degree_list
-                                )
-                            )
+                                # Use getattr to safely check if the attribute exists without crashing
+                                focus_val = getattr(self, 'FocusDegree_img_reconstructed', None)
+                                if focus_val is not None:
+                                    self.stack_focus_degree_list.append(focus_val)
+                                else:
+                                    logging.info("No reconstruction focus degree found. Skipping append.")
+                            
+                            logging.info(f"stack_focus_degree_list is {self.stack_focus_degree_list}")
                             # === Suppose now it's the 3rd stack position ===
                             # Check if focus degree decreased on the 2nd pos,
                             # if so change the obj moveing direction.
@@ -1112,13 +1105,13 @@ class ScanningExecutionThread(QThread):
         # Extract information
         WaveformPackageToBeExecute = self.RoundQueueDict[
             "RoundPackage_{}".format(EachRound + 1)
-        ][0]["WaveformPackage_{}".format(EachWaveform + 1)]
+        ][0]["WaveformPackage_{}".format(EachRound + 1)]
         CameraPackageToBeExecute = self.RoundQueueDict[
             "RoundPackage_{}".format(EachRound + 1)
-        ][1]["CameraPackage_{}".format(EachWaveform + 1)]
+        ][1]["CameraPackage_{}".format(EachRound + 1)]
         WaveformPackageGalvoInfor = self.RoundQueueDict[
             "GalvoInforPackage_{}".format(EachRound + 1)
-        ]["GalvoInfor_{}".format(EachWaveform + 1)]
+        ]["GalvoInfor_{}".format(EachRound + 1)]
 
         self.readinchan = WaveformPackageToBeExecute[3]
         self.daq_sampling_rate = WaveformPackageToBeExecute[0]
