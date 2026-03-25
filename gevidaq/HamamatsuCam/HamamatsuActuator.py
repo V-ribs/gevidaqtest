@@ -12,7 +12,7 @@ import logging
 import sys
 import threading
 import time
-
+import os
 import numpy as np
 import tifffile as skimtiff
 
@@ -270,13 +270,14 @@ class CamActuator:
         if saving_dir is not None:
             self.isSaving = True
             # Save the file.
-            with skimtiff.TiffWriter(saving_dir, append=True) as tif:
+           with skimtiff.TiffWriter(saving_dir, append=os.path.exists(saving_dir), bigtiff=True) as tif:
+                logging.info(f"imagecount is {self.imageCount}")
                 for eachframe in range(self.imageCount):
                     image = np.resize(
                         self.video_list[eachframe],
                         (self.dims[1], self.dims[0]),
                     )
-                    tif.save(image, compress=0, description=self.metaData)
+                    tif.write(image, compression=0, description=self.metaData)
         self.isSaving = False
 
     def Exit(self):
