@@ -360,13 +360,21 @@ class ScanningExecutionThread(QThread):
                             # Add the focus degree of previous image to the list.
                             if EachZStackPos > 0:
                                 # Use getattr to safely check if the attribute exists without crashing
-                                focus_val = getattr(self, 'FocusDegree_img_reconstructed', None)
+                                focus_val = getattr(
+                                    self, "FocusDegree_img_reconstructed", None
+                                )
                                 if focus_val is not None:
-                                    self.stack_focus_degree_list.append(focus_val)
+                                    self.stack_focus_degree_list.append(
+                                        focus_val
+                                    )
                                 else:
-                                    logging.info("No reconstruction focus degree found. Skipping append.")
-                            
-                            logging.info(f"stack_focus_degree_list is {self.stack_focus_degree_list}")
+                                    logging.info(
+                                        "No reconstruction focus degree found. Skipping append."
+                                    )
+
+                            logging.info(
+                                f"stack_focus_degree_list is {self.stack_focus_degree_list}"
+                            )
                             # === Suppose now it's the 3rd stack position ===
                             # Check if focus degree decreased on the 2nd pos,
                             # if so change the obj moveing direction.

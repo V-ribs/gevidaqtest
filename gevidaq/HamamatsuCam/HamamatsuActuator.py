@@ -9,10 +9,11 @@ Created on Wed May 27 17:14:53 2020
 import ctypes
 import importlib.resources
 import logging
+import os
 import sys
 import threading
 import time
-import os
+
 import numpy as np
 import tifffile as skimtiff
 
@@ -144,7 +145,9 @@ class CamActuator:
             self.hcam.setPropertyValue("subarray_mode", "OFF")
 
         else:
-            # set subarray mode off. This setting is not mandatory, but you have to control the setting order of offset and size when mode is on.
+            # set subarray mode off.
+            # This setting is not mandatory, but you have to control the
+            # setting order of offset and size when mode is on.
             self.hcam.setPropertyValue("subarray_mode", "OFF")
             self.hcam.setPropertyValue("subarray_hsize", ROI_hsize)
             self.hcam.setPropertyValue("subarray_vsize", ROI_vsize)
@@ -172,12 +175,9 @@ class CamActuator:
         video_list = []
         imageCount = 0  # The actual frame number that gets recorded.
         for _ in range(1):  # Record for range() number of images.
-            [
-                frames,
-                dims,
-            ] = (
-                self.hcam.getFrames()
-            )  # frames is a list with HCamData type, with np_array being the image.
+            # frames is a list of HCamData objects, each with the np_array
+            # property containing the image frame.
+            frames, self.dims = self.hcam.getFrames()
             for aframe in frames:
                 video_list.append(aframe.np_array)
                 imageCount += 1
@@ -198,12 +198,9 @@ class CamActuator:
         self.hcam.startAcquisition()
 
         while self.isLiving is True:
-            [
-                frames,
-                dims,
-            ] = (
-                self.hcam.getFrames()
-            )  # frames is a list with HCamData type, with np_array being the image.
+            # frames is a list of HCamData objects, each with the np_array
+            # property containing the image frame.
+            frames, self.dims = self.hcam.getFrames()
             self.Live_image = np.resize(
                 frames[-1].np_array, (dims[1], dims[0])
             )
@@ -247,12 +244,9 @@ class CamActuator:
         self.video_list = []
         self.imageCount = 0  # The actual frame number that gets recorded.
         while self.isStreaming is True:  # Record for range() number of images.
-            [
-                frames,
-                self.dims,
-            ] = (
-                self.hcam.getFrames()
-            )  # frames is a list with HCamData type, with np_array being the image.
+            # frames is a list of HCamData objects, each with the np_array
+            # property containing the image frame.
+            frames, self.dims = self.hcam.getFrames()
             for aframe in frames:
                 self.video_list.append(aframe.np_array)
                 self.imageCount += 1
@@ -270,7 +264,9 @@ class CamActuator:
         if saving_dir is not None:
             self.isSaving = True
             # Save the file.
-           with skimtiff.TiffWriter(saving_dir, append=os.path.exists(saving_dir), bigtiff=True) as tif:
+            with skimtiff.TiffWriter(
+                saving_dir, append=os.path.exists(saving_dir), bigtiff=True
+            ) as tif:
                 logging.info(f"imagecount is {self.imageCount}")
                 for eachframe in range(self.imageCount):
                     image = np.resize(
